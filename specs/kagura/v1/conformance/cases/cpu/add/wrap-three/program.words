@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-WRAP-THREE
+
+word = 0x03120001
+bytes = 0x01 0x00 0x12 0x03
+fields = op=0x0 rd=r3 rs1=r1 rs2=r2 imm=0x0001
+expectation = 0xFFFFFFFE + 2 + 1 wraps to one
+

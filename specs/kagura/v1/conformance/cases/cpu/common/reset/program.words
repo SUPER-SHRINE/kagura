@@ -1,0 +1,7 @@
+# KAGURA-V1-COMMON-RESET-001
+
+word = 0x60000000
+bytes = 0x00 0x00 0x00 0x60
+fields = op=0x6 rd=r0 rs1=r0 rs2=r0 imm=0x0000
+expectation = reset supplies PC zero and all-zero registers; the reserved instruction faults without changing that state
+

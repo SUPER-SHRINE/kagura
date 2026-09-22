@@ -1,0 +1,188 @@
+# Store and JZ coverage fragment for Kagura conformance cases.
+
+[[requirements]]
+id = "CPU-STB-VALUE"
+spec = "cpu.md#6-loadstore命令"
+statement = "STB writes only the low 8 bits of rd, including zero and all-one byte values."
+cases = [
+  "KAGURA-V1-STB-LOW-8",
+  "KAGURA-V1-STB-ZERO",
+  "KAGURA-V1-STB-FF-ODD-ADDRESS",
+  "KAGURA-V1-STB-RD-ZERO",
+]
+
+[[requirements]]
+id = "CPU-STB-ADDRESS"
+spec = "cpu.md#6-loadstore命令"
+statement = "STB computes its address from old rs1, old rs2, and sign-extended imm modulo 2^32 without an alignment restriction."
+cases = [
+  "KAGURA-V1-STB-ADDRESS-COMPONENTS-POSITIVE",
+  "KAGURA-V1-STB-ADDRESS-NEGATIVE-IMMEDIATE",
+  "KAGURA-V1-STB-ADDRESS-WRAP",
+  "KAGURA-V1-STB-FF-ODD-ADDRESS",
+  "KAGURA-V1-STB-OVERLAP-RD-RS1",
+  "KAGURA-V1-STB-OVERLAP-RD-RS2",
+]
+
+[[requirements]]
+id = "BUS-STB-ACCESS"
+spec = "bus.md#アクセス"
+statement = "STB emits one 8-bit write with the truncated value, and an unmapped write faults without architectural state change."
+cases = [
+  "KAGURA-V1-STB-LOW-8",
+  "KAGURA-V1-STB-BUS-FAULT",
+]
+
+[[requirements]]
+id = "CPU-STH-VALUE-ENDIAN"
+spec = "cpu.md#6-loadstore命令"
+statement = "STH writes the low 16 bits in little-endian order, including a zero value read from r0."
+cases = [
+  "KAGURA-V1-STH-LOW-16-LITTLE-ENDIAN",
+  "KAGURA-V1-STH-RD-ZERO",
+]
+
+[[requirements]]
+id = "CPU-STH-ADDRESS"
+spec = "cpu.md#6-loadstore命令"
+statement = "STH computes its address from old rs1, old rs2, and sign-extended imm modulo 2^32."
+cases = [
+  "KAGURA-V1-STH-ADDRESS-COMPONENTS-POSITIVE",
+  "KAGURA-V1-STH-ADDRESS-NEGATIVE-IMMEDIATE",
+  "KAGURA-V1-STH-ADDRESS-WRAP",
+  "KAGURA-V1-STH-OVERLAP-RD-RS1",
+  "KAGURA-V1-STH-OVERLAP-RD-RS2",
+]
+
+[[requirements]]
+id = "CPU-STH-ALIGNMENT"
+spec = "cpu.md#6-loadstore命令"
+statement = "STH requires 2-byte alignment and reports the complete unaligned store fault without committing state."
+cases = ["KAGURA-V1-STH-UNALIGNED-NO-WRITE"]
+
+[[requirements]]
+id = "BUS-STH-ACCESS"
+spec = "bus.md#アクセス"
+statement = "A successful STH is one indivisible 16-bit write; unaligned access does not reach the data bus and an unmapped write faults."
+cases = [
+  "KAGURA-V1-STH-SINGLE-ACCESS",
+  "KAGURA-V1-STH-UNALIGNED-NO-WRITE",
+  "KAGURA-V1-STH-BUS-FAULT",
+]
+
+[[requirements]]
+id = "CPU-STW-VALUE-ENDIAN"
+spec = "cpu.md#6-loadstore命令"
+statement = "STW writes all 32 bits in little-endian order, including a zero value read from r0."
+cases = [
+  "KAGURA-V1-STW-FULL-32-LITTLE-ENDIAN",
+  "KAGURA-V1-STW-RD-ZERO",
+]
+
+[[requirements]]
+id = "CPU-STW-ADDRESS"
+spec = "cpu.md#6-loadstore命令"
+statement = "STW computes its address from old rs1, old rs2, and sign-extended imm modulo 2^32."
+cases = [
+  "KAGURA-V1-STW-ADDRESS-COMPONENTS-POSITIVE",
+  "KAGURA-V1-STW-ADDRESS-NEGATIVE-IMMEDIATE",
+  "KAGURA-V1-STW-ADDRESS-WRAP",
+  "KAGURA-V1-STW-OVERLAP-RD-RS1",
+  "KAGURA-V1-STW-OVERLAP-RD-RS2",
+]
+
+[[requirements]]
+id = "CPU-STW-ALIGNMENT"
+spec = "cpu.md#6-loadstore命令"
+statement = "STW rejects every nonzero 4-byte alignment remainder without committing state."
+cases = [
+  "KAGURA-V1-STW-UNALIGNED-1",
+  "KAGURA-V1-STW-UNALIGNED-2",
+  "KAGURA-V1-STW-UNALIGNED-3",
+]
+
+[[requirements]]
+id = "BUS-STW-ACCESS"
+spec = "bus.md#アクセス"
+statement = "A successful STW is one indivisible 32-bit write; unaligned access does not reach the data bus and an unmapped write faults."
+cases = [
+  "KAGURA-V1-STW-SINGLE-ACCESS",
+  "KAGURA-V1-STW-UNALIGNED-1",
+  "KAGURA-V1-STW-UNALIGNED-2",
+  "KAGURA-V1-STW-UNALIGNED-3",
+  "KAGURA-V1-STW-BUS-FAULT",
+]
+
+[[requirements]]
+id = "CPU-STORE-FAULT-METADATA"
+spec = "cpu.md#9-fault処理"
+statement = "Store faults include faulting PC, effective address, width, access kind, a zero retired count, and unchanged architectural state."
+cases = [
+  "KAGURA-V1-STB-BUS-FAULT",
+  "KAGURA-V1-STH-UNALIGNED-NO-WRITE",
+  "KAGURA-V1-STH-BUS-FAULT",
+  "KAGURA-V1-STW-UNALIGNED-1",
+  "KAGURA-V1-STW-UNALIGNED-2",
+  "KAGURA-V1-STW-UNALIGNED-3",
+  "KAGURA-V1-STW-BUS-FAULT",
+]
+
+[[requirements]]
+id = "CPU-JZ-NOT-TAKEN"
+spec = "cpu.md#7-jump命令"
+statement = "JZ with a nonzero old rs1 advances PC by four, preserves rd, and does not validate or use the target operands."
+cases = [
+  "KAGURA-V1-JZ-NOT-TAKEN-BASIC",
+  "KAGURA-V1-JZ-NOT-TAKEN-IGNORES-RS2-IMM",
+  "KAGURA-V1-JZ-NOT-TAKEN-RD-EQ-RS1",
+]
+
+[[requirements]]
+id = "CPU-JZ-RELATIVE"
+spec = "cpu.md#7-jump命令"
+statement = "JZ selects PC-relative form when the rs2 field is r0, sign-extends and scales all immediate boundaries, writes the link, and wraps target arithmetic modulo 2^32."
+cases = [
+  "KAGURA-V1-JZ-REL-OFFSET-ZERO-LINK",
+  "KAGURA-V1-JZ-REL-OFFSET-POSITIVE",
+  "KAGURA-V1-JZ-REL-OFFSET-NEGATIVE",
+  "KAGURA-V1-JZ-REL-IMM-7FFF",
+  "KAGURA-V1-JZ-REL-IMM-8000",
+  "KAGURA-V1-JZ-REL-RD-ZERO",
+  "KAGURA-V1-JZ-RELATIVE-RS2-R0-DIFFERENCE",
+]
+
+[[requirements]]
+id = "CPU-JZ-INDIRECT"
+spec = "cpu.md#7-jump命令"
+statement = "JZ selects indirect form from a nonzero rs2 register field, uses the old register values, applies signed scaled offsets, and wraps target arithmetic modulo 2^32."
+cases = [
+  "KAGURA-V1-JZ-INDIRECT-BASIC-ALIGNED",
+  "KAGURA-V1-JZ-INDIRECT-OFFSET-POSITIVE",
+  "KAGURA-V1-JZ-INDIRECT-OFFSET-NEGATIVE",
+  "KAGURA-V1-JZ-INDIRECT-TARGET-WRAP",
+  "KAGURA-V1-JZ-INDIRECT-RD-EQ-RS2",
+  "KAGURA-V1-JZ-INDIRECT-RD-EQ-RS1",
+  "KAGURA-V1-JZ-INDIRECT-NONZERO-REGISTER-ZERO-VALUE",
+  "KAGURA-V1-JZ-RELATIVE-RS2-R0-DIFFERENCE",
+]
+
+[[requirements]]
+id = "CPU-JZ-UNALIGNED-ATOMIC"
+spec = "cpu.md#9-fault処理"
+statement = "An unaligned indirect JZ target reports UNALIGNED_PC with target metadata and commits neither link nor PC."
+cases = ["KAGURA-V1-JZ-INDIRECT-UNALIGNED"]
+[[requirements]]
+id = "CPU-STORE-FAULT-DEVICE-ATOMIC"
+spec = "cpu.md#9-fault処理"
+statement = "A faulted store preserves architectural state and leaves a stateful device unchanged for every access width."
+cases = [
+  "KAGURA-V1-STB-REPORTER-FAULT-ATOMIC",
+  "KAGURA-V1-STH-REPORTER-FAULT-ATOMIC",
+  "KAGURA-V1-STW-REPORTER-RESERVED-FAULT-ATOMIC",
+]
+
+[[requirements]]
+id = "CPU-JZ-PC-LINK-WRAP"
+spec = "cpu.md#7-jump命令"
+statement = "At PC 0xFFFFFFFC, a taken relative JZ wraps both next PC and link to zero."
+cases = ["KAGURA-V1-JZ-REL-PC-LINK-WRAP"]

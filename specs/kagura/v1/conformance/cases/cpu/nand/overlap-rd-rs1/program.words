@@ -1,0 +1,7 @@
+# KAGURA-V1-NAND-OVERLAP-RD-RS1
+
+word = 0x11120000
+bytes = 0x00 0x00 0x12 0x11
+fields = op=0x1 rd=r1 rs1=r1 rs2=r2 imm=0x0000
+expectation = rd may equal rs1 and both sources are read before destination commit
+

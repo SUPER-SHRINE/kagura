@@ -1,0 +1,7 @@
+# KAGURA-V1-MUL-IMM-IGNORED
+
+word = 0x3312FFFF
+bytes = 0xFF 0xFF 0x12 0x33
+fields = op=0x3 rd=r3 rs1=r1 rs2=r2 imm=0xFFFF
+expectation = imm 0xFFFF is ignored and 7 multiplied by 9 remains 63
+

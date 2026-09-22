@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-RELATIVE-RS2-R0-DIFFERENCE
+
+word = 0xC3100001
+bytes-le = [0x01, 0x00, 0x10, 0xC3]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r3
+- rs1 = r1
+- rs2 = r0
+- imm = 0x0001
+
+expected calculation:
+- rs2 field is r0, so PC-relative target = PC + 4 + 4 = 8, unlike the nonzero-field zero-value case
+

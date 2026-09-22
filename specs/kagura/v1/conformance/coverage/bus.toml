@@ -1,0 +1,34 @@
+[[requirements]]
+id = "BUS-WIDTHS-ENDIANNESS"
+spec = "bus.md#アクセス"
+statement = "The bus supports 8-, 16-, and 32-bit accesses and represents multi-byte values little-endian."
+cases = ["KAGURA-V1-BUS-RAM-LITTLE-ENDIAN"]
+
+[[requirements]]
+id = "BUS-UNMAPPED-FAULT"
+spec = "bus.md#アクセス"
+statement = "Reads and writes to unmapped addresses fault for every supported width."
+cases = ["KAGURA-V1-BUS-UNMAPPED-READS", "KAGURA-V1-BUS-UNMAPPED-WRITES"]
+
+[[requirements]]
+id = "BUS-MULTIBYTE-INDIVISIBLE"
+spec = "bus.md#アクセス"
+statement = "A multi-byte access is delivered as one operation and is not split into byte accesses."
+cases = ["KAGURA-V1-BUS-REPORTER-WRITE32"]
+
+[[requirements]]
+id = "BUS-WRITE-COMMIT"
+spec = "bus.md#アクセス"
+statement = "A successful write commits its complete value."
+cases = ["KAGURA-V1-BUS-RAM-LITTLE-ENDIAN", "KAGURA-V1-BUS-REPORTER-WRITE32"]
+
+[[requirements]]
+id = "BUS-FAULT-NO-SIDE-EFFECT"
+spec = "bus.md#アクセス"
+statement = "A faulted read or write leaves memory and device state unchanged."
+cases = [
+  "KAGURA-V1-BUS-RAM-FAULT-ATOMIC",
+  "KAGURA-V1-BUS-REPORTER-WRITE8-FAULT",
+  "KAGURA-V1-BUS-REPORTER-RESERVED-FAULT",
+  "KAGURA-V1-BUS-HIGH-ROM-CONTRACT",
+]

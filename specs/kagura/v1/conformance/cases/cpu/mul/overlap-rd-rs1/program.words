@@ -1,0 +1,7 @@
+# KAGURA-V1-MUL-OVERLAP-RD-RS1
+
+word = 0x31120000
+bytes = 0x00 0x00 0x12 0x31
+fields = op=0x3 rd=r1 rs1=r1 rs2=r2 imm=0x0000
+expectation = rd may equal rs1 and multiplication uses old r1
+

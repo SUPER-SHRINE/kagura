@@ -1,0 +1,15 @@
+# KAGURA-V1-STB-ADDRESS-COMPONENTS-POSITIVE
+
+word = 0x83120010
+bytes-le = [0x10, 0x00, 0x12, 0x83]
+
+encoding:
+- op  = 0x8 (STB)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0010
+
+expected calculation:
+- address = 0x80 + 0x70 + sext16(0x0010) = 0x100
+

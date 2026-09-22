@@ -1,0 +1,69 @@
+format = "kagura-conformance-case"
+version = 1
+id = "KAGURA-V1-COMMON-FETCH-FAULT-001"
+level = 3
+binary = "program.bin"
+spec = ["cpu.md#8-命令fetch", "cpu.md#9-fault処理", "bus.md#アクセス"]
+
+[image]
+load_address = 0x00000000
+
+[initial]
+pc = 0x00010000
+
+[initial.registers]
+r1 = 0x11111111
+r2 = 0x22222222
+r3 = 0x33333333
+r4 = 0x44444444
+r5 = 0x55555555
+r6 = 0x66666666
+r7 = 0x77777777
+r8 = 0x88888888
+r9 = 0x99999999
+r10 = 0xAAAAAAAA
+r11 = 0xBBBBBBBB
+r12 = 0xCCCCCCCC
+r13 = 0xDDDDDDDD
+r14 = 0xEEEEEEEE
+r15 = 0xFFFFFFFF
+
+[execution]
+until = "fault"
+max_steps = 1
+
+[expected.termination]
+kind = "fault"
+fault = "BUS_FAULT"
+faulting_pc = 0x00010000
+address = 0x00010000
+width = 32
+operation = "fetch"
+retired = 0
+
+[expected.state]
+pc = 0x00010000
+
+[expected.state.registers]
+r0 = 0x00000000
+r1 = 0x11111111
+r2 = 0x22222222
+r3 = 0x33333333
+r4 = 0x44444444
+r5 = 0x55555555
+r6 = 0x66666666
+r7 = 0x77777777
+r8 = 0x88888888
+r9 = 0x99999999
+r10 = 0xAAAAAAAA
+r11 = 0xBBBBBBBB
+r12 = 0xCCCCCCCC
+r13 = 0xDDDDDDDD
+r14 = 0xEEEEEEEE
+r15 = 0xFFFFFFFF
+
+[[expected.bus]]
+operation = "read"
+address = 0x00010000
+width = 32
+result = "fault"

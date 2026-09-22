@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SHL-AMOUNT-MASK-LARGE
+
+word = 0x23120002
+bytes = 0x02 0x00 0x12 0x23
+fields = op=0x2 rd=r3 rs1=r1 rs2=r2 imm=0x0002
+expectation = (63 + 2) & 31 is one, proving large rs2 values are masked after addition
+

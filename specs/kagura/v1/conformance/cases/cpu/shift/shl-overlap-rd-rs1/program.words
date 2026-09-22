@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SHL-OVERLAP-RD-RS1
+
+word = 0x21120000
+bytes = 0x00 0x00 0x12 0x21
+fields = op=0x2 rd=r1 rs1=r1 rs2=r2 imm=0x0000
+expectation = rd may equal rs1 and the old source is shifted
+

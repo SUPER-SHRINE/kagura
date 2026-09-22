@@ -1,0 +1,15 @@
+# KAGURA-V1-STW-OVERLAP-RD-RS2
+
+word = 0xB2120000
+bytes-le = [0x00, 0x00, 0x12, 0xB2]
+
+encoding:
+- op  = 0xB (STW)
+- rd  = r2
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- old r2 supplies full value 0x100 and address 0x100
+

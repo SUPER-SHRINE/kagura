@@ -1,0 +1,21 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-RAM-FAULT-ATOMIC"
+spec = ["bus.md#アクセス"]
+
+[[initial.memory]]
+address = 0x0000FFFC
+bytes = [0x10, 0x11, 0xAA, 0xBB]
+
+[[transactions]]
+operation = "write"
+address = 0x0000FFFE
+width = 32
+value = 0xDEADBEEF
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.memory]]
+address = 0x0000FFFC
+bytes = [0x10, 0x11, 0xAA, 0xBB]

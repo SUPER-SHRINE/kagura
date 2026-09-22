@@ -1,0 +1,13 @@
+[package]
+name = "kagura"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "kagura"
+path = "src/lib.rs"
+
+[dev-dependencies]
+ram = { package = "kagura-ram", path = "../runtime/devices/ram" }

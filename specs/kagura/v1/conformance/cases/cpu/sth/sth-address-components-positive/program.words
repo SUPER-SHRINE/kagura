@@ -1,0 +1,15 @@
+# KAGURA-V1-STH-ADDRESS-COMPONENTS-POSITIVE
+
+word = 0x93120010
+bytes-le = [0x10, 0x00, 0x12, 0x93]
+
+encoding:
+- op  = 0x9 (STH)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0010
+
+expected calculation:
+- address = 0x80 + 0x70 + 0x10 = 0x100
+

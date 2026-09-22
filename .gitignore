@@ -1,0 +1,6 @@
+# Editor and OS-local files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+/support/target/

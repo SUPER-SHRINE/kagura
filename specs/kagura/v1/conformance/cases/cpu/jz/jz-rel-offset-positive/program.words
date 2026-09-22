@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-REL-OFFSET-POSITIVE
+
+word = 0xC3100002
+bytes-le = [0x02, 0x00, 0x10, 0xC3]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r3
+- rs1 = r1
+- rs2 = r0
+- imm = 0x0002
+
+expected calculation:
+- offset = sext16(2) << 2 = 8; target = 0 + 4 + 8 = 12
+

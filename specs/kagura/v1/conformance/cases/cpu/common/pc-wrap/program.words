@@ -1,0 +1,6 @@
+# KAGURA-V1-COMMON-PC-WRAP
+
+word = 0x03120000
+bytes = 0x00 0x00 0x12 0x03
+fields = op=0x0 rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = 1 + 2 + 0 = 3; PC wraps from 0xFFFFFFFC to 0 modulo 2^32

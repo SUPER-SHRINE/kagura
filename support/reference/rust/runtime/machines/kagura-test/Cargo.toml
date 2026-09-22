@@ -1,0 +1,16 @@
+[package]
+name = "kagura-test-machine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "test_runner"
+path = "src/lib.rs"
+
+[dependencies]
+kagura = { path = "../../../kagura" }
+ram = { package = "kagura-ram", path = "../../devices/ram" }
+debug-io = { package = "kagura-debug-io", path = "../../devices/debug-io" }
+test-reporter = { package = "kagura-test-reporter", path = "../../devices/test-reporter" }

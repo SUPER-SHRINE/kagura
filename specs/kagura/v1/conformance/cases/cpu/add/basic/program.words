@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-BASIC
+
+word = 0x03120000
+bytes = 0x00 0x00 0x12 0x03
+fields = op=0x0 rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = 1 + 2 + 0 = 3; fetch is one aligned 32-bit little-endian word and PC advances by four
+

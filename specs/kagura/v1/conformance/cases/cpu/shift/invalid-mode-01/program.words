@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-INVALID-MODE-01
+
+word = 0x23124000
+bytes = 0x00 0x40 0x12 0x23
+fields = op=0x2 rd=r3 rs1=r1 rs2=r2 imm=0x4000
+expectation = mode 01 is reserved and faults atomically after fetch
+

@@ -1,0 +1,21 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-REPORTER-WRITE8-FAULT"
+spec = ["bus.md#アクセス"]
+
+[[initial.devices]]
+id = "reporter"
+state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }
+
+[[transactions]]
+operation = "write"
+address = 0xFFFFF004
+width = 8
+value = 0xAA
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.devices]]
+id = "reporter"
+state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }

@@ -1,0 +1,7 @@
+# KAGURA-V1-NAND-ONES-ONES
+
+word = 0x13120000
+bytes = 0x00 0x00 0x12 0x13
+fields = op=0x1 rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = NAND of two all-one words is zero
+

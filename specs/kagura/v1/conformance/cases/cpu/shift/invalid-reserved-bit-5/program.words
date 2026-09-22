@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-INVALID-RESERVED-BIT-5
+
+word = 0x23120020
+bytes = 0x20 0x00 0x12 0x23
+fields = op=0x2 rd=r3 rs1=r1 rs2=r2 imm=0x0020
+expectation = reserved imm bit 5 set causes INVALID_INSTRUCTION
+

@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SHR-OVERLAP
+
+word = 0x22128000
+bytes = 0x00 0x80 0x12 0x22
+fields = op=0x2 rd=r2 rs1=r1 rs2=r2 imm=0x8000
+expectation = rd may equal rs2 and old r2 supplies the logical shift amount
+

@@ -1,0 +1,15 @@
+# KAGURA-V1-STB-ZERO
+
+word = 0x83120000
+bytes-le = [0x00, 0x00, 0x12, 0x83]
+
+encoding:
+- op  = 0x8 (STB)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- address = 0x100; low8(0) = 0
+

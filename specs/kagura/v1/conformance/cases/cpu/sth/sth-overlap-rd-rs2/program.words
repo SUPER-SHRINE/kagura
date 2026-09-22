@@ -1,0 +1,15 @@
+# KAGURA-V1-STH-OVERLAP-RD-RS2
+
+word = 0x92120000
+bytes-le = [0x00, 0x00, 0x12, 0x92]
+
+encoding:
+- op  = 0x9 (STH)
+- rd  = r2
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- old r2 supplies value 0x0100 and address 0x100
+

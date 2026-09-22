@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-NOT-TAKEN-IGNORES-RS2-IMM
+
+word = 0xC312FFFF
+bytes-le = [0xFF, 0xFF, 0x12, 0xC3]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0xFFFF
+
+expected calculation:
+- not-taken form ignores unaligned r2 = 3 and imm = -1; no target alignment fault occurs
+

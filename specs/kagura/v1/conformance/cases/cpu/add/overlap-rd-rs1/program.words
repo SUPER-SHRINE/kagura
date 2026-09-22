@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-OVERLAP-RD-RS1
+
+word = 0x01120001
+bytes = 0x01 0x00 0x12 0x01
+fields = op=0x0 rd=r1 rs1=r1 rs2=r2 imm=0x0001
+expectation = destination r1 is read from old state before committing 5 + 7 + 1
+

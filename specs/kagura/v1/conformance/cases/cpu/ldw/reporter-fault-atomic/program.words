@@ -1,0 +1,8 @@
+word = 0x73120000
+bytes_le = [0x00, 0x00, 0x12, 0x73]
+op = 0x7 (LDW)
+rd = 0x3 (r3)
+rs1 = 0x1 (r1)
+rs2 = 0x2 (r2)
+imm = 0x0000
+calculation = Reporter read32 at 0xFFFFF000 faults and leaves all Reporter state unchanged

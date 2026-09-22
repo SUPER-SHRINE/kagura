@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SAR-RD-ZERO
+
+word = 0x2012C000
+bytes = 0x00 0xC0 0x12 0x20
+fields = op=0x2 rd=r0 rs1=r1 rs2=r2 imm=0xC000
+expectation = arithmetic right result is discarded when rd is r0
+

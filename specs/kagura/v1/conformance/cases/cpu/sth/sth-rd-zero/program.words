@@ -1,0 +1,15 @@
+# KAGURA-V1-STH-RD-ZERO
+
+word = 0x90120000
+bytes-le = [0x00, 0x00, 0x12, 0x90]
+
+encoding:
+- op  = 0x9 (STH)
+- rd  = r0
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- r0 reads as zero, so 16-bit zero is stored
+

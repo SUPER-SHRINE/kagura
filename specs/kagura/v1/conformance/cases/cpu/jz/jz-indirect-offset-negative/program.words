@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-INDIRECT-OFFSET-NEGATIVE
+
+word = 0xC312FFFF
+bytes-le = [0xFF, 0xFF, 0x12, 0xC3]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0xFFFF
+
+expected calculation:
+- target = 0x100 + (-1 << 2) = 0xFC
+

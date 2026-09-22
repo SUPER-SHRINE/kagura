@@ -1,0 +1,14 @@
+# KAGURA-V1-STW-REPORTER-RESERVED-FAULT-ATOMIC
+
+word = 0xB3120000
+bytes-le = [0x00, 0x00, 0x12, 0xB3]
+
+encoding:
+- op  = 0xB (STW)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- Reporter RESERVED at 0xFFFFF00C rejects write32 and retains its complete state

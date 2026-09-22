@@ -1,0 +1,15 @@
+# KAGURA-V1-STW-BUS-FAULT
+
+word = 0xB3120000
+bytes-le = [0x00, 0x00, 0x12, 0xB3]
+
+encoding:
+- op  = 0xB (STW)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- aligned address 0x10000 is unmapped; write32 faults atomically
+

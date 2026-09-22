@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-IMM-MIN-NEG
+
+word = 0x03128000
+bytes = 0x00 0x80 0x12 0x03
+fields = op=0x0 rd=r3 rs1=r1 rs2=r2 imm=0x8000
+expectation = 65536 + 0 - 32768 = 32768
+

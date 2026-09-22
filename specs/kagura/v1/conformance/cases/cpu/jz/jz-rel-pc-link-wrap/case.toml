@@ -1,0 +1,67 @@
+format = "kagura-conformance-case"
+version = 1
+id = "KAGURA-V1-JZ-REL-PC-LINK-WRAP"
+level = 3
+binary = "program.bin"
+spec = ["cpu.md#1-アーキテクチャ状態", "cpu.md#7-jump命令", "cpu.md#8-命令fetch"]
+
+[image]
+load_address = 0xFFFFFFFC
+
+[initial]
+pc = 0xFFFFFFFC
+
+[initial.registers]
+r0 = 0x00000000
+r1 = 0x00000000
+r2 = 0x22222222
+r3 = 0xDEADBEEF
+r4 = 0x44444444
+r5 = 0x55555555
+r6 = 0x66666666
+r7 = 0x77777777
+r8 = 0x88888888
+r9 = 0x99999999
+r10 = 0xAAAAAAAA
+r11 = 0xBBBBBBBB
+r12 = 0xCCCCCCCC
+r13 = 0xDDDDDDDD
+r14 = 0xEEEEEEEE
+r15 = 0xFFFFFFFF
+
+[execution]
+until = "steps"
+steps = 1
+max_steps = 1
+
+[expected.termination]
+kind = "steps"
+retired = 1
+
+[expected.state]
+pc = 0x00000000
+
+[expected.state.registers]
+r0 = 0x00000000
+r1 = 0x00000000
+r2 = 0x22222222
+r3 = 0x00000000
+r4 = 0x44444444
+r5 = 0x55555555
+r6 = 0x66666666
+r7 = 0x77777777
+r8 = 0x88888888
+r9 = 0x99999999
+r10 = 0xAAAAAAAA
+r11 = 0xBBBBBBBB
+r12 = 0xCCCCCCCC
+r13 = 0xDDDDDDDD
+r14 = 0xEEEEEEEE
+r15 = 0xFFFFFFFF
+
+[[expected.bus]]
+operation = "read"
+address = 0xFFFFFFFC
+width = 32
+result = "ok"
+value = 0xC3100000

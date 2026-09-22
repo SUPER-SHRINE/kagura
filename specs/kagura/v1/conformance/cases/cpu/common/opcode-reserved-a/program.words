@@ -1,0 +1,7 @@
+# KAGURA-V1-COMMON-OPCODE-RESERVED-A
+
+word = 0xA3120000
+bytes = 0x00 0x00 0x12 0xA3
+fields = op=0xA rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = reserved opcode 0xA faults after exactly one instruction fetch and leaves state unchanged
+

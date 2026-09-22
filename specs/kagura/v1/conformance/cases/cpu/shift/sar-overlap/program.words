@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SAR-OVERLAP
+
+word = 0x2112C000
+bytes = 0x00 0xC0 0x12 0x21
+fields = op=0x2 rd=r1 rs1=r1 rs2=r2 imm=0xC000
+expectation = rd may equal rs1 and the old negative source is shifted
+

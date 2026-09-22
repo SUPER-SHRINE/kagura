@@ -1,0 +1,7 @@
+# KAGURA-V1-MUL-HIGH-BIT
+
+word = 0x33120000
+bytes = 0x00 0x00 0x12 0x33
+fields = op=0x3 rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = operands are 32-bit patterns; low32(0x80000000 * 3) is 0x80000000
+

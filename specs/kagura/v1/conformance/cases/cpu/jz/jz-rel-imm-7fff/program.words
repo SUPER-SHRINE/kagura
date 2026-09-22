@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-REL-IMM-7FFF
+
+word = 0xC3107FFF
+bytes-le = [0xFF, 0x7F, 0x10, 0xC3]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r3
+- rs1 = r1
+- rs2 = r0
+- imm = 0x7FFF
+
+expected calculation:
+- offset = 0x7FFF << 2 = 0x1FFFC; target = 4 + 0x1FFFC = 0x20000
+

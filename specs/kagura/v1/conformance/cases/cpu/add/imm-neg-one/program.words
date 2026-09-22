@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-IMM-NEG-ONE
+
+word = 0x0312FFFF
+bytes = 0xFF 0xFF 0x12 0x03
+fields = op=0x0 rd=r3 rs1=r1 rs2=r2 imm=0xFFFF
+expectation = 1 + 0 + sext16(0xFFFF) = 0
+

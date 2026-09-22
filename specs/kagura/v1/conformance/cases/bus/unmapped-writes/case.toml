@@ -1,0 +1,31 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-UNMAPPED-WRITES"
+spec = ["bus.md#アクセス"]
+
+[[transactions]]
+operation = "write"
+address = 0x00010000
+width = 8
+value = 0x12
+
+[[transactions]]
+operation = "write"
+address = 0x00010000
+width = 16
+value = 0x3412
+
+[[transactions]]
+operation = "write"
+address = 0x00010000
+width = 32
+value = 0x78563412
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.transactions]]
+result = "fault"

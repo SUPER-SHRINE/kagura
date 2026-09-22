@@ -1,0 +1,15 @@
+# KAGURA-V1-STB-ADDRESS-NEGATIVE-IMMEDIATE
+
+word = 0x8312FFF0
+bytes-le = [0xF0, 0xFF, 0x12, 0x83]
+
+encoding:
+- op  = 0x8 (STB)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0xFFF0
+
+expected calculation:
+- address = 0x110 + 0 + (-16) = 0x100
+

@@ -1,0 +1,28 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-UNMAPPED-READS"
+spec = ["bus.md#アクセス"]
+
+[[transactions]]
+operation = "read"
+address = 0x00010000
+width = 8
+
+[[transactions]]
+operation = "read"
+address = 0x00010000
+width = 16
+
+[[transactions]]
+operation = "read"
+address = 0x00010000
+width = 32
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.transactions]]
+result = "fault"

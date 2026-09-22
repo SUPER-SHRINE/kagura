@@ -1,0 +1,59 @@
+format = "kagura-conformance-case"
+version = 1
+id = "KAGURA-V1-SHIFT-SHL-OVERLAP-RD-RS1"
+level = 2
+binary = "program.bin"
+spec = ["cpu.md#1-アーキテクチャ状態", "cpu.md#2-命令encoding", "cpu.md#5-shift命令"]
+
+[image]
+load_address = 0x00000000
+
+[initial]
+pc = 0x00000000
+
+[initial.registers]
+r1 = 0x00000003
+r2 = 0x00000001
+r3 = 0x33333333
+r4 = 0x44444444
+r5 = 0x55555555
+r6 = 0x66666666
+r7 = 0x77777777
+r8 = 0x88888888
+r9 = 0x99999999
+r10 = 0xAAAAAAAA
+r11 = 0xBBBBBBBB
+r12 = 0xCCCCCCCC
+r13 = 0xDDDDDDDD
+r14 = 0xEEEEEEEE
+r15 = 0xFFFFFFFF
+
+[execution]
+until = "steps"
+steps = 1
+max_steps = 1
+
+[expected.termination]
+kind = "steps"
+retired = 1
+
+[expected.state]
+pc = 0x00000004
+
+[expected.state.registers]
+r0 = 0x00000000
+r1 = 0x00000006
+r2 = 0x00000001
+r3 = 0x33333333
+r4 = 0x44444444
+r5 = 0x55555555
+r6 = 0x66666666
+r7 = 0x77777777
+r8 = 0x88888888
+r9 = 0x99999999
+r10 = 0xAAAAAAAA
+r11 = 0xBBBBBBBB
+r12 = 0xCCCCCCCC
+r13 = 0xDDDDDDDD
+r14 = 0xEEEEEEEE
+r15 = 0xFFFFFFFF

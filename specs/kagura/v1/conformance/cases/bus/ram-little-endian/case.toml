@@ -1,0 +1,48 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-RAM-LITTLE-ENDIAN"
+spec = ["bus.md#アクセス"]
+
+[[initial.memory]]
+address = 0x00000100
+bytes = [0, 0, 0, 0]
+
+[[transactions]]
+operation = "write"
+address = 0x00000100
+width = 32
+value = 0x78563412
+
+[[transactions]]
+operation = "read"
+address = 0x00000100
+width = 8
+
+[[transactions]]
+operation = "read"
+address = 0x00000100
+width = 16
+
+[[transactions]]
+operation = "read"
+address = 0x00000100
+width = 32
+
+[[expected.transactions]]
+result = "ok"
+
+[[expected.transactions]]
+result = "ok"
+value = 0x12
+
+[[expected.transactions]]
+result = "ok"
+value = 0x3412
+
+[[expected.transactions]]
+result = "ok"
+value = 0x78563412
+
+[[expected.memory]]
+address = 0x00000100
+bytes = [0x12, 0x34, 0x56, 0x78]

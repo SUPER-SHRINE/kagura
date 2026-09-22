@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-OVERLAP-ALL
+
+word = 0x01110001
+bytes = 0x01 0x00 0x11 0x01
+fields = op=0x0 rd=r1 rs1=r1 rs2=r1 imm=0x0001
+expectation = all register fields may overlap and both source reads observe old r1 = 4
+

@@ -1,0 +1,224 @@
+[[requirements]]
+id = "CPU-CMP-EQUALITY"
+spec = "cpu.md#4-比較"
+statement = "CMP equality and inversion produce normalized Boolean results"
+cases = [
+  "KAGURA-V1-CMP-EQ-TRUE",
+  "KAGURA-V1-CMP-EQ-FALSE",
+  "KAGURA-V1-CMP-EQ-INVERT-TRUE",
+  "KAGURA-V1-CMP-EQ-INVERT-FALSE",
+]
+
+[[requirements]]
+id = "CPU-CMP-SIGNED"
+spec = "cpu.md#4-比較"
+statement = "CMP signed less-than uses two's-complement i32 ordering"
+cases = [
+  "KAGURA-V1-CMP-LTS-NEGATIVE-LESS",
+  "KAGURA-V1-CMP-LTS-ZERO-NOT-LESS-NEGATIVE",
+  "KAGURA-V1-CMP-LTS-MIN-MAX",
+  "KAGURA-V1-CMP-LTS-EQUAL-FALSE",
+  "KAGURA-V1-CMP-LTS-INVERT",
+]
+
+[[requirements]]
+id = "CPU-CMP-UNSIGNED"
+spec = "cpu.md#4-比較"
+statement = "CMP unsigned less-than uses u32 ordering"
+cases = [
+  "KAGURA-V1-CMP-LTU-BASIC",
+  "KAGURA-V1-CMP-LTU-FFFFFFFF-NOT-LESS-ZERO",
+  "KAGURA-V1-CMP-LTU-SIGNED-DIFFERENCE",
+  "KAGURA-V1-CMP-LTU-EQUAL-FALSE",
+  "KAGURA-V1-CMP-LTU-INVERT",
+]
+
+[[requirements]]
+id = "CPU-CMP-OVERLAP-R0"
+spec = "cpu.md#4-比較"
+statement = "CMP reads old overlapping sources and honors r0 write discard"
+cases = [
+  "KAGURA-V1-CMP-OVERLAP-RD-RS1",
+  "KAGURA-V1-CMP-OVERLAP-RD-RS2",
+  "KAGURA-V1-CMP-OVERLAP-SOURCES",
+  "KAGURA-V1-CMP-RD-ZERO",
+]
+
+[[requirements]]
+id = "CPU-CMP-INVALID"
+spec = "cpu.md#4-比較"
+statement = "CMP rejects mode 11 and every nonzero reserved immediate region"
+cases = [
+  "KAGURA-V1-CMP-INVALID-MODE-11",
+  "KAGURA-V1-CMP-INVALID-RESERVED-BIT-3",
+  "KAGURA-V1-CMP-INVALID-RESERVED-BIT-15",
+]
+
+[[requirements]]
+id = "CPU-LDB-VALUE"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDB returns the specified width with required extension and endianness"
+cases = [
+  "KAGURA-V1-LDB-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDB-ZERO",
+  "KAGURA-V1-LDB-7F-ODD-ADDRESS",
+  "KAGURA-V1-LDB-80-ZERO-EXTEND-NEGATIVE-IMM",
+  "KAGURA-V1-LDB-FF-ADDRESS-WRAP",
+]
+
+[[requirements]]
+id = "CPU-LDB-ADDRESS"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDB computes rs1 + rs2 + sext16(imm) modulo 2^32"
+cases = [
+  "KAGURA-V1-LDB-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDB-ZERO",
+  "KAGURA-V1-LDB-7F-ODD-ADDRESS",
+  "KAGURA-V1-LDB-80-ZERO-EXTEND-NEGATIVE-IMM",
+  "KAGURA-V1-LDB-FF-ADDRESS-WRAP",
+  "KAGURA-V1-LDB-OVERLAP-RD-RS1",
+  "KAGURA-V1-LDB-OVERLAP-RD-RS2",
+  "KAGURA-V1-LDB-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "CPU-LDB-OVERLAP-R0"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDB uses old overlapping source values and still reads for destination r0"
+cases = [
+  "KAGURA-V1-LDB-OVERLAP-RD-RS1",
+  "KAGURA-V1-LDB-OVERLAP-RD-RS2",
+  "KAGURA-V1-LDB-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "BUS-LDB-WIDTH-ATOMIC"
+spec = "bus.md#アクセス"
+statement = "LDB performs exactly one indivisible data read of its declared width"
+cases = [
+  "KAGURA-V1-LDB-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDB-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "CPU-LDB-FAULT"
+spec = "cpu.md#9-fault処理"
+statement = "LDB reports alignment or bus faults atomically with complete load metadata"
+cases = [
+  "KAGURA-V1-LDB-BUS-FAULT",
+]
+
+[[requirements]]
+id = "CPU-LDH-VALUE"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDH returns the specified width with required extension and endianness"
+cases = [
+  "KAGURA-V1-LDH-LITTLE-ENDIAN-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDH-ZERO-EXTEND-ALIGNMENT-2-NEGATIVE-IMM",
+  "KAGURA-V1-LDH-ADDRESS-WRAP",
+]
+
+[[requirements]]
+id = "CPU-LDH-ADDRESS"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDH computes rs1 + rs2 + sext16(imm) modulo 2^32"
+cases = [
+  "KAGURA-V1-LDH-LITTLE-ENDIAN-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDH-ZERO-EXTEND-ALIGNMENT-2-NEGATIVE-IMM",
+  "KAGURA-V1-LDH-ADDRESS-WRAP",
+  "KAGURA-V1-LDH-OVERLAP-RD-RS1",
+  "KAGURA-V1-LDH-OVERLAP-RD-RS2",
+  "KAGURA-V1-LDH-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "CPU-LDH-OVERLAP-R0"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDH uses old overlapping source values and still reads for destination r0"
+cases = [
+  "KAGURA-V1-LDH-OVERLAP-RD-RS1",
+  "KAGURA-V1-LDH-OVERLAP-RD-RS2",
+  "KAGURA-V1-LDH-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "BUS-LDH-WIDTH-ATOMIC"
+spec = "bus.md#アクセス"
+statement = "LDH performs exactly one indivisible data read of its declared width"
+cases = [
+  "KAGURA-V1-LDH-LITTLE-ENDIAN-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDH-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "CPU-LDH-FAULT"
+spec = "cpu.md#9-fault処理"
+statement = "LDH reports alignment or bus faults atomically with complete load metadata"
+cases = [
+  "KAGURA-V1-LDH-UNALIGNED-1-NO-DATA-ACCESS",
+  "KAGURA-V1-LDH-BUS-FAULT",
+]
+
+[[requirements]]
+id = "CPU-LDW-VALUE"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDW returns the specified width with required extension and endianness"
+cases = [
+  "KAGURA-V1-LDW-LITTLE-ENDIAN-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDW-NEGATIVE-IMM",
+  "KAGURA-V1-LDW-ZERO",
+  "KAGURA-V1-LDW-FFFFFFFF-ADDRESS-WRAP",
+]
+
+[[requirements]]
+id = "CPU-LDW-ADDRESS"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDW computes rs1 + rs2 + sext16(imm) modulo 2^32"
+cases = [
+  "KAGURA-V1-LDW-LITTLE-ENDIAN-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDW-NEGATIVE-IMM",
+  "KAGURA-V1-LDW-ZERO",
+  "KAGURA-V1-LDW-FFFFFFFF-ADDRESS-WRAP",
+  "KAGURA-V1-LDW-OVERLAP-RD-RS1",
+  "KAGURA-V1-LDW-OVERLAP-RD-RS2",
+  "KAGURA-V1-LDW-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "CPU-LDW-OVERLAP-R0"
+spec = "cpu.md#6-loadstore命令"
+statement = "LDW uses old overlapping source values and still reads for destination r0"
+cases = [
+  "KAGURA-V1-LDW-OVERLAP-RD-RS1",
+  "KAGURA-V1-LDW-OVERLAP-RD-RS2",
+  "KAGURA-V1-LDW-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "BUS-LDW-WIDTH-ATOMIC"
+spec = "bus.md#アクセス"
+statement = "LDW performs exactly one indivisible data read of its declared width"
+cases = [
+  "KAGURA-V1-LDW-LITTLE-ENDIAN-POSITIVE-COMPONENTS",
+  "KAGURA-V1-LDW-RD-ZERO-STILL-READS",
+]
+
+[[requirements]]
+id = "CPU-LDW-FAULT"
+spec = "cpu.md#9-fault処理"
+statement = "LDW reports alignment or bus faults atomically with complete load metadata"
+cases = [
+  "KAGURA-V1-LDW-UNALIGNED-1-NO-DATA-ACCESS",
+  "KAGURA-V1-LDW-UNALIGNED-2-NO-DATA-ACCESS",
+  "KAGURA-V1-LDW-UNALIGNED-3-NO-DATA-ACCESS",
+  "KAGURA-V1-LDW-BUS-FAULT",
+]
+[[requirements]]
+id = "CPU-LOAD-FAULT-DEVICE-ATOMIC"
+spec = "cpu.md#9-fault処理"
+statement = "A faulted load preserves architectural state and leaves a stateful device unchanged for every access width."
+cases = [
+  "KAGURA-V1-LDB-REPORTER-FAULT-ATOMIC",
+  "KAGURA-V1-LDH-REPORTER-FAULT-ATOMIC",
+  "KAGURA-V1-LDW-REPORTER-FAULT-ATOMIC",
+]

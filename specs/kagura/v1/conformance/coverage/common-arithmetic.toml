@@ -1,0 +1,163 @@
+# Coverage fragment for common CPU/fetch, ADD, NAND, MUL, and SHIFT cases.
+# This file is non-executable traceability data consumed with the other coverage fragments.
+
+[[requirements]]
+id = "CPU-RESET-STATE"
+spec = "cpu.md#1-アーキテクチャ状態"
+statement = "Reset establishes PC zero and zero in every architectural register."
+cases = ["KAGURA-V1-COMMON-RESET-001"]
+
+[[requirements]]
+id = "CPU-ENCODING-RESERVED-OPCODES"
+spec = "cpu.md#2-命令encoding"
+statement = "Every opcode omitted from the instruction table produces INVALID_INSTRUCTION."
+cases = [
+  "KAGURA-V1-COMMON-OPCODE-RESERVED-6",
+  "KAGURA-V1-COMMON-OPCODE-RESERVED-A",
+  "KAGURA-V1-COMMON-OPCODE-RESERVED-E",
+  "KAGURA-V1-COMMON-OPCODE-RESERVED-F",
+]
+
+[[requirements]]
+id = "CPU-FETCH-ALIGNMENT-FAULT"
+spec = "cpu.md#8-命令fetch"
+statement = "An unaligned PC produces UNALIGNED_PC before a bus access and preserves state."
+cases = ["KAGURA-V1-COMMON-PC-UNALIGNED-001"]
+
+[[requirements]]
+id = "CPU-FETCH-BUS-FAULT"
+spec = "cpu.md#8-命令fetch"
+statement = "A faulting aligned 32-bit instruction fetch produces BUS_FAULT and preserves state."
+cases = ["KAGURA-V1-COMMON-FETCH-FAULT-001"]
+
+[[requirements]]
+id = "CPU-FETCH-WIDTH-ENDIAN-PC"
+spec = "cpu.md#8-命令fetch"
+statement = "A successful instruction is fetched as one 32-bit little-endian access and sequential PC advances by four."
+cases = ["KAGURA-V1-ADD-BASIC"]
+
+[[requirements]]
+id = "CPU-REGISTER-R0-R15"
+spec = "cpu.md#1-アーキテクチャ状態"
+statement = "r0 reads as zero and discards writes, while register field 0xF selects r15."
+cases = [
+  "KAGURA-V1-ADD-RD-ZERO",
+  "KAGURA-V1-ADD-SOURCE-ZERO",
+  "KAGURA-V1-ADD-R15",
+  "KAGURA-V1-NAND-RD-ZERO",
+  "KAGURA-V1-MUL-RD-ZERO",
+  "KAGURA-V1-SHIFT-SHL-RD-ZERO",
+  "KAGURA-V1-SHIFT-SHR-RD-ZERO",
+  "KAGURA-V1-SHIFT-SAR-RD-ZERO",
+]
+
+[[requirements]]
+id = "CPU-SOURCE-OLD-STATE"
+spec = "cpu.md#2-命令encoding"
+statement = "Source registers are read from old state and overlapping destination fields commit only after evaluation."
+cases = [
+  "KAGURA-V1-ADD-OVERLAP-RD-RS1",
+  "KAGURA-V1-ADD-OVERLAP-RD-RS2",
+  "KAGURA-V1-ADD-OVERLAP-SOURCES",
+  "KAGURA-V1-ADD-OVERLAP-ALL",
+  "KAGURA-V1-NAND-OVERLAP-RD-RS1",
+  "KAGURA-V1-NAND-OVERLAP-RD-RS2",
+  "KAGURA-V1-NAND-OVERLAP-SOURCES",
+  "KAGURA-V1-MUL-OVERLAP-RD-RS1",
+  "KAGURA-V1-MUL-OVERLAP-RD-RS2",
+  "KAGURA-V1-SHIFT-SHL-OVERLAP-RD-RS1",
+  "KAGURA-V1-SHIFT-SHL-OVERLAP-RD-RS2",
+  "KAGURA-V1-SHIFT-SHR-OVERLAP",
+  "KAGURA-V1-SHIFT-SAR-OVERLAP",
+]
+
+[[requirements]]
+id = "CPU-ADD-FORMULA"
+spec = "cpu.md#3-算術"
+statement = "ADD sums both sources and a sign-extended immediate modulo 2^32."
+cases = [
+  "KAGURA-V1-ADD-BASIC",
+  "KAGURA-V1-ADD-IMM-MAX-POS",
+  "KAGURA-V1-ADD-IMM-MIN-NEG",
+  "KAGURA-V1-ADD-IMM-NEG-ONE",
+  "KAGURA-V1-ADD-WRAP-TWO",
+  "KAGURA-V1-ADD-WRAP-THREE",
+]
+
+[[requirements]]
+id = "CPU-NAND-FORMULA-IMM"
+spec = "cpu.md#3-算術"
+statement = "NAND computes the complement of the source conjunction and ignores imm."
+cases = [
+  "KAGURA-V1-NAND-TRUTH-PATTERN",
+  "KAGURA-V1-NAND-ZERO-ZERO",
+  "KAGURA-V1-NAND-ONES-ONES",
+  "KAGURA-V1-NAND-IMM-IGNORED",
+]
+
+[[requirements]]
+id = "CPU-MUL-LOW32-IMM"
+spec = "cpu.md#3-算術"
+statement = "MUL returns low32 of the product, never faults on overflow, and ignores imm."
+cases = [
+  "KAGURA-V1-MUL-BASIC",
+  "KAGURA-V1-MUL-BY-ZERO",
+  "KAGURA-V1-MUL-BY-ONE",
+  "KAGURA-V1-MUL-WRAP-FFFFFFFF-TWO",
+  "KAGURA-V1-MUL-DISCARD-HIGH",
+  "KAGURA-V1-MUL-HIGH-BIT",
+  "KAGURA-V1-MUL-IMM-IGNORED",
+]
+
+[[requirements]]
+id = "CPU-SHIFT-AMOUNT"
+spec = "cpu.md#5-shift命令"
+statement = "Shift amount is (rs2 + imm[4:0]) & 31."
+cases = [
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-0",
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-1-DISCARD-HIGH",
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-31",
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-FROM-RS2",
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-FROM-IMM",
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-WRAP-32",
+  "KAGURA-V1-SHIFT-SHL-AMOUNT-MASK-LARGE",
+]
+
+[[requirements]]
+id = "CPU-SHIFT-LOGICAL-RIGHT"
+spec = "cpu.md#5-shift命令"
+statement = "Logical right shift supports amounts 0 through 31, masks wrapped amounts, and zero-fills."
+cases = [
+  "KAGURA-V1-SHIFT-SHR-AMOUNT-0",
+  "KAGURA-V1-SHIFT-SHR-AMOUNT-1-ZERO-FILL",
+  "KAGURA-V1-SHIFT-SHR-AMOUNT-31",
+  "KAGURA-V1-SHIFT-SHR-AMOUNT-WRAP",
+]
+
+[[requirements]]
+id = "CPU-SHIFT-ARITHMETIC-RIGHT"
+spec = "cpu.md#5-shift命令"
+statement = "Arithmetic right shift fills from original bit 31 and supports masked amounts 0 through 31."
+cases = [
+  "KAGURA-V1-SHIFT-SAR-POSITIVE",
+  "KAGURA-V1-SHIFT-SAR-NEGATIVE-AMOUNT-1-SIGN-FILL",
+  "KAGURA-V1-SHIFT-SAR-NEGATIVE-AMOUNT-31",
+  "KAGURA-V1-SHIFT-SAR-AMOUNT-0",
+  "KAGURA-V1-SHIFT-SAR-AMOUNT-WRAP",
+]
+
+[[requirements]]
+id = "CPU-SHIFT-INVALID-ENCODING"
+spec = "cpu.md#5-shift命令"
+statement = "Mode 01 and any nonzero imm[13:5] produce atomic INVALID_INSTRUCTION."
+cases = [
+  "KAGURA-V1-SHIFT-INVALID-MODE-01",
+  "KAGURA-V1-SHIFT-INVALID-RESERVED-BIT-5",
+  "KAGURA-V1-SHIFT-INVALID-RESERVED-BIT-13",
+  "KAGURA-V1-SHIFT-INVALID-RESERVED-MULTIPLE",
+]
+[[requirements]]
+id = "CPU-PC-SEQUENTIAL-WRAP"
+spec = "cpu.md#1-アーキテクチャ状態"
+statement = "Sequential PC advancement wraps modulo 2^32 at the highest aligned instruction address."
+cases = ["KAGURA-V1-COMMON-PC-WRAP"]

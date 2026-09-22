@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-R15
+
+word = 0x0FFF0000
+bytes = 0x00 0x00 0xFF 0x0F
+fields = op=0x0 rd=r15 rs1=r15 rs2=r15 imm=0x0000
+expectation = field value 0xF selects r15 for destination and both sources; doubling wraps to zero
+

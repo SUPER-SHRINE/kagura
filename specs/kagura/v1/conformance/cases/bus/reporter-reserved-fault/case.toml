@@ -1,0 +1,21 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-REPORTER-RESERVED-FAULT"
+spec = ["bus.md#アクセス"]
+
+[[initial.devices]]
+id = "reporter"
+state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }
+
+[[transactions]]
+operation = "write"
+address = 0xFFFFF00C
+width = 32
+value = 0xDEADBEEF
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.devices]]
+id = "reporter"
+state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }

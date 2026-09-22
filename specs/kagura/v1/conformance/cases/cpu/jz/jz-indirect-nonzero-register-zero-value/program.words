@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-INDIRECT-NONZERO-REGISTER-ZERO-VALUE
+
+word = 0xC3120001
+bytes-le = [0x01, 0x00, 0x12, 0xC3]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0001
+
+expected calculation:
+- rs2 field is r2 (nonzero register number) even though its value is zero; indirect target = 0 + 4 = 4
+

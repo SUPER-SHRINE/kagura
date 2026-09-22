@@ -1,0 +1,17 @@
+[package]
+name = "kagura-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "kagura"
+path = "src/main.rs"
+
+[dependencies]
+kagura-assembly = { path = "../assembly" }
+cpu-tester = { path = "../cpu-tester" }
+conformance-runner = { package = "kagura-conformance-runner", path = "../../conformance/runner" }
+serde_json = "1"
+toml = "0.8"

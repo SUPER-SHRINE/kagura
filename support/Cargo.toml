@@ -1,0 +1,21 @@
+[workspace]
+members = [
+    "reference/rust/kagura",
+    "reference/rust/runtime/devices/ram",
+    "reference/rust/runtime/devices/debug-io",
+    "reference/rust/runtime/devices/high-test-rom",
+    "reference/rust/runtime/devices/test-reporter",
+    "reference/rust/runtime/machines/kagura-conformance",
+    "reference/rust/runtime/machines/kagura-test",
+    "conformance/runner",
+    "tools/assembly",
+    "tools/cpu-tester",
+    "tools/kagura-cli",
+]
+resolver = "3"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/SUPER-SHRINE/kagura"

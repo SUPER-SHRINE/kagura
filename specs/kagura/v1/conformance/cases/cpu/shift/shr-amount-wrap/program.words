@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SHR-AMOUNT-WRAP
+
+word = 0x23128001
+bytes = 0x01 0x80 0x12 0x23
+fields = op=0x2 rd=r3 rs1=r1 rs2=r2 imm=0x8001
+expectation = logical right shift masks amount 32 to zero
+

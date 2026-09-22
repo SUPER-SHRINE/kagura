@@ -1,0 +1,8 @@
+word = 0xD0120000
+bytes_le = [0x00, 0x00, 0x12, 0xD0]
+op = 0xD (CMP)
+rd = 0x0 (r0)
+rs1 = 0x1 (r1)
+rs2 = 0x2 (r2)
+imm = 0x0000
+calculation = comparison is true, but destination r0 discards the write

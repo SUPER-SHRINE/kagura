@@ -1,0 +1,7 @@
+# KAGURA-V1-ADD-SOURCE-ZERO
+
+word = 0x0302FFFF
+bytes = 0xFF 0xFF 0x02 0x03
+fields = op=0x0 rd=r3 rs1=r0 rs2=r2 imm=0xFFFF
+expectation = r0 reads as zero: 0 + 7 - 1 = 6
+

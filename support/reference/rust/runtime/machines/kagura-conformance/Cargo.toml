@@ -1,0 +1,16 @@
+[package]
+name = "kagura-conformance-machine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+name = "conformance_machine"
+path = "src/lib.rs"
+
+[dependencies]
+kagura = { path = "../../../kagura" }
+ram = { package = "kagura-ram", path = "../../devices/ram" }
+test-reporter = { package = "kagura-test-reporter", path = "../../devices/test-reporter" }
+high-test-rom = { package = "kagura-high-test-rom", path = "../../devices/high-test-rom" }

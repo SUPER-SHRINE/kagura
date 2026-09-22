@@ -1,0 +1,8 @@
+word = 0xD1120000
+bytes_le = [0x00, 0x00, 0x12, 0xD1]
+op = 0xD (CMP)
+rd = 0x1 (r1)
+rs1 = 0x1 (r1)
+rs2 = 0x2 (r2)
+imm = 0x0000
+calculation = old r1 == old r2 is false; overlapping r1 receives normalized 0

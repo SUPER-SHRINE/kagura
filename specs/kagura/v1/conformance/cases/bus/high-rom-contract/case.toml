@@ -1,0 +1,46 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-HIGH-ROM-CONTRACT"
+spec = ["bus.md#アクセス"]
+
+[[initial.devices]]
+id = "high-rom"
+state = { word = 0x12345678 }
+
+[[transactions]]
+operation = "read"
+address = 0xFFFFFFFC
+width = 32
+
+[[transactions]]
+operation = "read"
+address = 0xFFFFFFFC
+width = 8
+
+[[transactions]]
+operation = "read"
+address = 0xFFFFFFFC
+width = 16
+
+[[transactions]]
+operation = "write"
+address = 0xFFFFFFFC
+width = 32
+value = 0xDEADBEEF
+
+[[expected.transactions]]
+result = "ok"
+value = 0x12345678
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.transactions]]
+result = "fault"
+
+[[expected.devices]]
+id = "high-rom"
+state = { word = 0x12345678 }

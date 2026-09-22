@@ -1,0 +1,15 @@
+# KAGURA-V1-JZ-REL-RD-ZERO
+
+word = 0xC0100001
+bytes-le = [0x01, 0x00, 0x10, 0xC0]
+
+encoding:
+- op  = 0xC (JZ)
+- rd  = r0
+- rs1 = r1
+- rs2 = r0
+- imm = 0x0001
+
+expected calculation:
+- target = 4 + 4 = 8; link write to r0 is discarded
+

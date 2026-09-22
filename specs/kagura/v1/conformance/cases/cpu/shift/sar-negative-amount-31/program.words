@@ -1,0 +1,7 @@
+# KAGURA-V1-SHIFT-SAR-NEGATIVE-AMOUNT-31
+
+word = 0x2312C000
+bytes = 0x00 0xC0 0x12 0x23
+fields = op=0x2 rd=r3 rs1=r1 rs2=r2 imm=0xC000
+expectation = arithmetic right shift of a negative pattern by 31 yields all ones
+

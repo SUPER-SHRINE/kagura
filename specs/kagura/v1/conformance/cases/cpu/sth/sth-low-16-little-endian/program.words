@@ -1,0 +1,15 @@
+# KAGURA-V1-STH-LOW-16-LITTLE-ENDIAN
+
+word = 0x93120000
+bytes-le = [0x00, 0x00, 0x12, 0x93]
+
+encoding:
+- op  = 0x9 (STH)
+- rd  = r3
+- rs1 = r1
+- rs2 = r2
+- imm = 0x0000
+
+expected calculation:
+- low16(0xA1B2C3D4) = 0xC3D4, stored bytes D4 C3
+

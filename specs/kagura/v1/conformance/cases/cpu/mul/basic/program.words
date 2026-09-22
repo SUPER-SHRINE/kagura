@@ -1,0 +1,7 @@
+# KAGURA-V1-MUL-BASIC
+
+word = 0x33120000
+bytes = 0x00 0x00 0x12 0x33
+fields = op=0x3 rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = 7 multiplied by 9 produces 63
+

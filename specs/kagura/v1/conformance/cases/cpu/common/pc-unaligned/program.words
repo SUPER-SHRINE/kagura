@@ -1,0 +1,7 @@
+# KAGURA-V1-COMMON-PC-UNALIGNED-001
+
+word = 0x03120000
+bytes = 0x00 0x00 0x12 0x03
+fields = op=0x0 rd=r3 rs1=r1 rs2=r2 imm=0x0000
+expectation = unaligned PC faults before any bus access and leaves all architectural state unchanged
+
