@@ -1,0 +1,37 @@
+.md-footer-meta { padding: 0; background: transparent; border-top: 1px solid rgba(91, 105, 145, 0.18); }
+.kagura-footer {
+  --kagura-ink: #18233f;
+  --kagura-muted: #56627b;
+  display: flex;
+  width: min(100%, 76rem);
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-inline: auto;
+  padding: 0.35rem clamp(1.25rem, 5vw, 2rem);
+  color: var(--kagura-muted);
+  font-size: 0.8rem;
+}
+.kagura-footer__credits {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+  font-size: 0.8125rem;
+}
+.kagura-footer__github {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 0.4rem;
+  color: var(--kagura-muted);
+}
+.kagura-footer__github svg { display: block; width: 1.25rem; height: 1.25rem; fill: currentColor; }
+html .md-footer-meta.md-typeset .kagura-footer a:not(:focus, :hover) { color: var(--kagura-muted); }
+html .md-footer-meta.md-typeset .kagura-footer a:hover,
+html .md-footer-meta.md-typeset .kagura-footer a:focus { color: var(--kagura-ink); }
+.kagura-footer a:focus-visible { outline: 3px solid #e09e29; outline-offset: 2px; }

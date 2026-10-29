@@ -63,3 +63,16 @@ release noteとassetを確認してからGitHub上で公開します。軽量tag
 ## ライセンス
 
 このリポジトリは[MIT License](./LICENSE.md)で公開します。
+
+## ローカルで仕様を読む
+
+サイトはリポジトリルートで次のコマンドから生成・閲覧できます。
+
+```powershell
+python -m venv target/website/venv
+target/website/venv/Scripts/python -m pip install -r website/requirements.txt
+pwsh -NoProfile -File tools/build-docs.ps1 -Serve
+```
+
+初回はサイト生成用Python環境を作り、依存関係をインストールします。\
+サイトは `http://localhost:8012` で開きます。

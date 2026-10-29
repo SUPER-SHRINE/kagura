@@ -1,0 +1,43 @@
+# Build through tools/build-docs.ps1, which places this config beside sources/ and public.
+[project]
+site_name = "Kagura"
+site_description = "CPU ISA と bus contract に焦点を当てた VM 基盤の規格。"
+extra_css = ["assets/stylesheets/site.css"]
+site_url = "https://super-shrine.github.io/kagura/"
+docs_dir = "sources"
+site_dir = "public"
+strict = true
+nav = [
+  { "Home" = "index.md" },
+  { "Specs" = [
+    "specs/README.md",
+    { "Kagura v1" = [
+      "specs/kagura/v1/README.md",
+      "specs/kagura/v1/cpu.md",
+      "specs/kagura/v1/bus.md",
+      "specs/kagura/v1/conformance-overview.md",
+      { "適合試験" = [
+        "specs/kagura/v1/conformance/README.md",
+        "specs/kagura/v1/conformance/machine.md",
+        "specs/kagura/v1/conformance/case-format.md",
+        "specs/kagura/v1/conformance/bus-case-format.md",
+        "specs/kagura/v1/conformance/coverage-format.md",
+        "specs/kagura/v1/conformance/runner-semantics.md",
+        "specs/kagura/v1/conformance/result-format.md",
+        "specs/kagura/v1/conformance/coverage/README.md",
+      ] },
+    ] },
+  ] },
+]
+
+[project.theme]
+language = "ja"
+custom_dir = "overrides"
+font = false
+logo = "assets/kagura-icon.png"
+favicon = "assets/kagura-icon.png"
+features = ["navigation.tabs", "navigation.sections", "navigation.indexes"]
+
+[project.validation]
+invalid_links = true
+invalid_link_anchors = false
