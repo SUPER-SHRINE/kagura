@@ -2,7 +2,7 @@
 id = "BUS-WIDTHS-ENDIANNESS"
 spec = "bus.md#アクセス"
 statement = "The bus supports 8-, 16-, and 32-bit accesses and represents multi-byte values little-endian."
-cases = ["KAGURA-V1-BUS-RAM-LITTLE-ENDIAN"]
+cases = ["KAGURA-V1-BUS-RAM-LITTLE-ENDIAN", "KAGURA-V1-BUS-RAM-UNALIGNED"]
 
 [[requirements]]
 id = "BUS-UNMAPPED-FAULT"
@@ -20,7 +20,7 @@ cases = ["KAGURA-V1-BUS-REPORTER-WRITE32"]
 id = "BUS-WRITE-COMMIT"
 spec = "bus.md#アクセス"
 statement = "A successful write commits its complete value."
-cases = ["KAGURA-V1-BUS-RAM-LITTLE-ENDIAN", "KAGURA-V1-BUS-REPORTER-WRITE32"]
+cases = ["KAGURA-V1-BUS-RAM-LITTLE-ENDIAN", "KAGURA-V1-BUS-RAM-UNALIGNED", "KAGURA-V1-BUS-REPORTER-WRITE32"]
 
 [[requirements]]
 id = "BUS-FAULT-NO-SIDE-EFFECT"

@@ -2,7 +2,8 @@
 
 ## 1. encoding規則
 
-共通結果はUTF-8のJSON Linesとし、1 caseにつき1 objectを1行で出力する。field名とenum valueはcase TOMLと同様にcase-sensitiveとする。
+共通結果はUTF-8のJSON Linesとし、1 caseにつき1 objectを1行で出力する。\
+field名とenum valueはcase TOMLと同様にcase-sensitiveとする。
 
 ## 2. case結果
 
@@ -18,7 +19,7 @@
 {"format":"kagura-conformance-result","version":1,"suite":"cpu","case":"KAGURA-V1-ADD-001","level":2,"result":"fail","mismatches":[{"path":"state.registers.r3","expected":3,"actual":4}]}
 ```
 
-validなcaseを実行した結果の必須field:
+有効なcaseを実行した結果に必須のfield:
 
 | field | 意味 |
 | --- | --- |
@@ -29,19 +30,25 @@ validなcaseを実行した結果の必須field:
 | `level` | CPU caseではcase TOMLの`level`、Bus caseでは`null` |
 | `result` | `pass`、`fail`、`error`、`unsupported` |
 
-`fail`では`mismatches`を1件以上含める。各mismatchは比較対象を示す`path`、`expected`、`actual`を持つ。
+`fail`では`mismatches`を1件以上含める。\
+各mismatchには比較対象を示す`path`、`expected`、`actual`を含める。
 
-`error`ではcaseまたはrunnerの問題を説明する`message`を含める。`unsupported`ではrunnerが提供する最大levelを`runner_level`に含める。
+`error`ではcaseまたはrunnerの問題を説明する`message`を含める。\
+`unsupported`ではrunnerが提供する最大levelを`runner_level`に含める。
 
-case TOMLから`id`を取得する前にerrorとなった場合は、`case`を`null`とし、入力を識別するUTF-8 pathを`source`へ入れる。
+case TOMLから`id`を取得する前にerrorとなった場合は、`case`を`null`とする。\
+入力を識別するUTF-8 pathを`source`に入れる。
 
 ```json
 {"format":"kagura-conformance-result","version":1,"suite":"cpu","case":null,"source":"cases/cpu/broken/case.toml","level":null,"result":"error","message":"missing required field: id"}
 ```
 
-coverage validation errorでは`suite`を`coverage`、`case`と`level`を`null`とする。`source`には可能なら問題を含むcoverage fragmentのrelative pathを入れる。coverage errorの詳細規則は[Coverage Manifest Format](./coverage-format.md)に従う。
+coverage validation errorでは`suite`を`coverage`、`case`と`level`を`null`とする。\
+`source`には可能な場合、問題を含むcoverage fragmentのrelative pathを入れる。\
+coverage errorの詳細規則は[Coverage Manifest Format](./coverage-format.md)に従う。
 
-runnerは追加fieldを出力してもよい。結果consumerは未知の追加fieldを無視しなければならない。
+runnerは追加fieldを出力してもよい。\
+結果consumerは未知の追加fieldを無視しなければならない。
 
 ## 3. path表現
 
@@ -75,12 +82,14 @@ transactions[0].result
 
 ## 4. process終了status
 
-CLI runnerは次のprocess exit statusを使用する。
+suite結果は次の表の上から順に成立条件を判定し、最初に成立した行の結果へ集約する。\
+CLI runnerは、その行のprocess exit statusを使用する。
 
-| status | 意味 |
-| ---: | --- |
-| `0` | 全caseがpass |
-| `1` | 1件以上のcaseがfail |
-| `2` | suite error、runner error、未対応case |
+| status | suite結果 | 成立条件 |
+| ---: | --- | --- |
+| `2` | `error` | suite errorまたはrunner errorがある、あるいは1件以上のcaseが`error`または`unsupported` |
+| `1` | `fail` | 1件以上のcaseが`fail` |
+| `0` | `pass` | coverage manifestと全caseがvalidであり、全caseが`pass` |
 
-platformがこの数値を表現できない場合、最も近い同等の成功・失敗通知を使用してよい。JSON Linesの`result`が規範的な個別結果である。
+platformがこの数値を表現できない場合、最も近い同等の成功・失敗通知を使用してよい。\
+JSON Linesの`result`が規範的な個別結果である。

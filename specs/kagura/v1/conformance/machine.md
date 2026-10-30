@@ -2,7 +2,8 @@
 
 ## 1. 目的
 
-Conformance Test MachineはKagura仕様の一部ではなく、test binaryへ再現可能なbus environmentを与えるための固定profileである。
+Conformance Test Machineは、適合試験におけるaddress mapとdeviceの動作を定義し、test binaryに再現可能なbus環境を提供する固定profileである。\
+CPUとbusの動作は[CPU ISA](../cpu.md)と[Bus契約](../bus.md)に従い、本profileはrunner adapterが構成する試験環境に適用する。
 
 ## 2. address map
 
@@ -13,32 +14,36 @@ Conformance Test MachineはKagura仕様の一部ではなく、test binaryへ再
 | `0xFFFFFFFC..0xFFFFFFFF` | High Test ROM、4 byte |
 | その他 | unmapped |
 
-unmapped addressへのread/writeはbus faultを返す。
+unmapped addressへの読み込みまたは書き込みはbus faultを返す。
 
 ## 3. Test RAM
 
-- Test RAMは64 KiBのbyte-addressed memoryとする。
-- 8-bit、16-bit、32-bitのread/writeを受理する。
-- multi-byte valueはlittle-endianとする。
-- range外へ一部でもはみ出すaccessはfaultし、memoryを変更しない。
-- setup完了時に指定されていないbyteは`0`とする。
-- hostによるbinary loadとinitial memory patchはCPU実行ではなく、bus traceへ記録しない。
+- Test RAMは64 KiBのbyte-addressed memoryとする
+- accessの全byteがrange内に収まる8-bit、16-bit、32-bitの読み込みと書き込みを、開始addressのalignmentによらず受理する
+- 複数byteの値の表現は[Bus契約](../bus.md#アクセス)に従う
+- range外へ一部でもはみ出すaccessはfaultし、memoryを変更しない
+- setup完了時に指定されていないbyteは`0`とする
+- hostによるbinary loadとinitial memory patchはCPU実行ではなく、bus traceにも記録しない
 
-CPUが要求するalignmentは[CPU ISA](../cpu.md)が検査する。Test RAM自体はrange内のunaligned accessを受理してもよいが、適合CPUからそのaccessが到達してはならない。
+CPUが要求するalignmentは[CPU ISA](../cpu.md)が検査する。
 
 ## 4. High Test ROM
 
-High Test ROMは最上位addressでのPC/link wrapを検査するための4-byte read-only deviceである。
+High Test ROMは、最上位addressにおけるPC/link wrapを検査する4-byte read-only deviceである。
 
-- host setupで正確に4 byteを配置する。
-- `0xFFFFFFFC`へのaligned 32-bit readだけを受理する。
-- 8-bit/16-bit read、全write、その他のoffsetへのaccessはfaultする。
-- busにはfetchとdata readの区別がないため、`0xFFFFFFFC`への任意の32-bit readを同じように受理する。
-- setupとinspectionはCPU bus traceへ含めない。
+- reset時の`word`は`0`とする
+- host setupで正確に4 byteを配置する
+- `0xFFFFFFFC`へのaligned 32-bit readだけを受理する
+- 8-bitまたは16-bit read、すべてのwrite、その他のoffsetへのaccessはfaultする
+- busにはfetchとdata readの区別がないため、`0xFFFFFFFC`への任意の32-bit readを同様に受理する
+- setupとinspectionはCPU bus traceに含めない
+
+device snapshotの`word`は、この4 byteを[Bus契約のlittle-endian表現](../bus.md#アクセス)で解釈した32-bit値である。\
+CPU caseのbinary配置と`initial.devices`の適用順序は[runnerのsetup順序](./runner-semantics.md#4-setup順序)に従う。
 
 ## 5. Test Reporter
 
-Test Reporterはguest-driven caseの終了を通知するためのwrite-only deviceである。
+Test Reporterはguest-driven caseの終了を通知するwrite-only deviceである。
 
 | address | register | 意味 |
 | --- | --- | --- |
@@ -49,42 +54,39 @@ Test Reporterはguest-driven caseの終了を通知するためのwrite-only dev
 
 Reporterの規則:
 
-- reset時の全register値は`0`とする。
-- aligned 32-bit writeだけを受理する。
-- read、8-bit write、16-bit write、unaligned write、`RESERVED`へのwriteはfaultする。
-- `CASE_ID`と`DETAIL`への成功writeは値を保存する。
-- `STATUS`への成功writeは値を保存し、その命令がcommitした後にReporter terminationを成立させる。
-- `STATUS`の値`1`はPASS、`2`はFAILとする。その他の値によるterminationはinvalid reportとしてcaseを失敗させる。
-- faultしたReporter accessはregister値を変更しない。
-- runnerはsetup時にReporterの各registerを任意の32-bit値へ設定し、termination後に副作用なしでsnapshotできなければならない。このhost操作はbus transactionではない。
+- reset時の全register値を`0`とする
+- aligned 32-bit writeだけを受理する
+- read、8-bit write、16-bit write、unaligned write、`RESERVED`へのwriteはfaultする
+- `CASE_ID`と`DETAIL`への成功writeでは値を保存する
+- `STATUS`への成功writeでは値を保存し、その命令のcommit後にReporter terminationを成立させる
+- `STATUS`の値`1`はPASS、`2`はFAILとし、それ以外の値によるterminationはinvalid reportとしてcaseを失敗させる
+- faultしたReporter accessではregister値を変更しない
+- runnerはsetup時にReporterの各registerを任意の32-bit値に設定し、termination後に副作用なしでsnapshotできなければならず、このhost操作はbus transactionではない
 
-Reporterを使うこと自体はKagura適合条件ではない。Reporter accessに使用した命令も通常のKagura命令として実行されるため、その命令が不正ならcaseは成功しない。
+Reporterの使用自体はKagura適合条件ではない。\
+Reporter accessに使う命令も通常のKagura命令として実行されるため、その命令が不正ならcaseは成功しない。
 
 ## 6. device状態
 
-Case TOMLのdevice snapshotで使用するdevice IDは次のとおりとする。
+Case TOMLのdevice snapshotで使用するdevice IDを次に示す。
 
 | ID | state field |
 | --- | --- |
 | `reporter` | `status`, `case_id`, `detail`, `reserved` |
 | `high-rom` | `word` |
 
-runnerは未知のdevice IDまたはstate fieldをsuite errorとして拒否する。device snapshotのsetupとinspectionはbus traceへ含めない。
+CPU caseとBus caseの`initial.devices`および`expected.devices`の各entryは、指定deviceの全state fieldを正確に1回ずつ含める。\
+device IDは各list内で一意とし、runnerは未知のdevice ID、未知・欠落・重複したstate field、重複device IDをsuite errorとして拒否する。\
+device snapshotのsetupとinspectionはbus traceに含めない。
 
 ## 7. CPU起動時状態
 
-runnerはTest RAMとReporterを初期化した後、CPUをresetする。Level 1 caseは次の状態から開始する。
-
-- `r0..r15 = 0`
-- `PC = 0`
-
-Level 2またはLevel 3 caseは、reset後にcase TOMLが指定したPCとregisterを注入してよい。`r0`へ`0`以外を指定してはならない。
+CPU resetは[CPU ISAのアーキテクチャ状態](../cpu.md#1-アーキテクチャ状態)に従う。\
+resetと初期値注入の順序は[runnerのsetup順序](./runner-semantics.md#4-setup順序)、注入できるfieldとlevelは[CPU caseの初期状態](./case-format.md#4-初期状態)で定義する。
 
 ## 8. 実行境界
 
-1 stepは、現在のPCにある命令をfetchし、成功ならその命令のstate transitionをcommitする1回の試行である。
+1 stepは、現在のPCにある命令をfetchし、成功した場合にその命令のstate transitionをcommitする1回の試行である。
 
-- 成功した命令だけをretired instructionとして数える。
-- faultした命令はretired countへ含めない。
-- Reporter terminationはReporter write命令のcommit後に成立し、その命令はretired countへ含める。
-- setupと結果観測はretired countおよびbus traceへ含めない。
+retired countとterminationの判定順序は[runnerのstep実行loop](./runner-semantics.md#5-step実行loop)に従う。\
+setupと結果観測は命令の実行試行ではなく、retired countにもbus traceにも含めない。

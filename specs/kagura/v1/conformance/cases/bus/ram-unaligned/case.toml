@@ -1,0 +1,84 @@
+format = "kagura-bus-conformance-case"
+version = 1
+id = "KAGURA-V1-BUS-RAM-UNALIGNED"
+spec = ["bus.md#アクセス"]
+
+[[initial.memory]]
+address = 0x100
+bytes = [0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7]
+
+[[transactions]]
+operation = "write"
+address = 0x101
+width = 16
+value = 0x1234
+
+[[transactions]]
+operation = "read"
+address = 0x101
+width = 16
+
+[[transactions]]
+operation = "write"
+address = 0x105
+width = 32
+value = 0x78563412
+
+[[transactions]]
+operation = "read"
+address = 0x105
+width = 32
+
+[[transactions]]
+operation = "write"
+address = 0x10E
+width = 32
+value = 0xEFCDAB89
+
+[[transactions]]
+operation = "read"
+address = 0x10E
+width = 32
+
+[[transactions]]
+operation = "write"
+address = 0x113
+width = 32
+value = 0x40302010
+
+[[transactions]]
+operation = "read"
+address = 0x113
+width = 32
+
+[[expected.transactions]]
+result = "ok"
+
+[[expected.transactions]]
+result = "ok"
+value = 0x1234
+
+[[expected.transactions]]
+result = "ok"
+
+[[expected.transactions]]
+result = "ok"
+value = 0x78563412
+
+[[expected.transactions]]
+result = "ok"
+
+[[expected.transactions]]
+result = "ok"
+value = 0xEFCDAB89
+
+[[expected.transactions]]
+result = "ok"
+
+[[expected.transactions]]
+result = "ok"
+value = 0x40302010
+
+[[expected.memory]]
+address = 0x100
+bytes = [0xA0, 0x34, 0x12, 0xA3, 0xA4, 0x12, 0x34, 0x56, 0x78, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0x89, 0xAB, 0xCD, 0xEF, 0xB2, 0x10, 0x20, 0x30, 0x40, 0xB7]

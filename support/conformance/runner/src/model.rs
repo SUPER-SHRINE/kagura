@@ -76,8 +76,7 @@ pub struct Execution {
 pub struct CpuExpected {
     pub termination: ExpectedTermination,
     pub state: Option<ExpectedState>,
-    #[serde(default)]
-    pub bus: Vec<BusEvent>,
+    pub bus: Option<Vec<BusEvent>>,
     #[serde(default)]
     pub devices: Vec<DeviceState>,
 }

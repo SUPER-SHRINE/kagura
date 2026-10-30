@@ -1,17 +1,18 @@
 # Kagura CPU
 
-本書は Kagura の 32-bit CPU ISA を定義する。memory access は [Kagura Bus](./bus.md) に従う。
+本書ではKaguraの32-bit CPU ISAを定義する。\
+memory accessは[Kagura Bus](./bus.md)に従う。
 
 ## 1. アーキテクチャ状態
 
-- 32-bit little-endian、byte-addressed
-- 32-bit 固定長命令
+- 32-bit little-endian方式、byte address方式
+- 32-bit固定長命令
 - 32-bit register `r0..r15`
-- `r0` の read は常に `0`、write は破棄
-- 独立した 32-bit `PC`
-- `PC` は実行中命令の address を指し、逐次実行では `4` 増える
+- `r0`の読み込み値は常に`0`であり、書き込みは破棄する
+- 独立した32-bit `PC`
+- `PC`は実行中命令のaddressを指し、逐次実行では`(PC + 4) mod 2^32`へ進む
 
-reset 時は `r0..r15 = 0`, `PC = 0` とする。
+reset時は`r0..r15 = 0`, `PC = 0`とする。
 
 ## 2. 命令encoding
 
@@ -21,6 +22,9 @@ reset 時は `r0..r15 = 0`, `PC = 0` とする。
 | op (4 bit) | rd (4 bit) | rs1 (4bit) | rs2 (4bit) | imm (16 bit)     |
 +------------+------------+------------+------------+------------------+
 ```
+
+bit番号は最下位bitを`0`とし、`[h:l]`はbit `h`からbit `l`までを含む範囲を表す。\
+`rd`、`rs1`、`rs2`の各4-bit fieldは、`0..15`をregister `r0..r15`へ対応付けるselectorである。
 
 | opcode | 命令 |
 | --- | --- |
@@ -37,9 +41,17 @@ reset 時は `r0..r15 = 0`, `PC = 0` とする。
 | `1100` | `JZ` |
 | `1101` | `CMP` |
 
-表にない opcode は `INVALID_INSTRUCTION` とする。特記しない `imm` は `sext16(imm)` として扱う。
+表にないopcodeは`INVALID_INSTRUCTION`とする。\
+特記しない`imm`は`sext16(imm)`として扱う。
 
-source register は命令開始時の state から読み、成功した命令の最後に destination と PC を commit する。operand register が重複してもよい。
+source registerは命令開始時のstateから読み、成功した命令の最後にdestinationとPCをcommitする。\
+operand registerは重複してもよい。
+
+以下の式における`rs1`と`rs2`は、各selectorが選ぶregisterの命令開始時の値を表す。\
+代入先の`rd`はselectorが選ぶregisterであり、storeで値として使う`rd`は命令開始時の値とする。
+
+`sext16(x)`は16-bit値`x`を2の補数表現の符号付き整数として解釈した値であり、`x < 2^15`なら`x`、それ以外なら`x - 2^16`となる。\
+`low32(x)`は`x mod 2^32`とする。
 
 ## 3. 算術
 
@@ -49,7 +61,8 @@ NAND rd, rs1, rs2, imm   rd = ~(rs1 & rs2)
 MUL  rd, rs1, rs2, imm   rd = low32(rs1 * rs2)
 ```
 
-`NAND` と `MUL` は `imm` を無視する。overflow flag と overflow fault は持たない。
+`NAND`と`MUL`は`imm`を無視する。\
+overflow flagとoverflow faultは持たない。
 
 ## 4. 比較
 
@@ -57,30 +70,32 @@ MUL  rd, rs1, rs2, imm   rd = low32(rs1 * rs2)
 CMP rd, rs1, rs2, imm
 ```
 
-- `imm[1:0]` は基本比較種別を表す。
+- `imm[1:0]`は基本比較種別を表す
 - `00`: `rs1 == rs2`
-- `01`: signed less-than。`rs1` と `rs2` を two's complement `i32` として比較する。
-- `10`: unsigned less-than。`rs1` と `rs2` を `u32` として比較する。
+- `01`: signed less-thanであり、`rs1`と`rs2`を2の補数表現の`i32`として比較する
+- `10`: unsigned less-thanであり、`rs1`と`rs2`を`u32`として比較する
 - `11`: `INVALID_INSTRUCTION`
-- `imm[2]` は result の反転 bit とする。`0` はそのまま、`1` は論理否定する。
-- `imm[15:3]` は `0` でなければならず、違反は `INVALID_INSTRUCTION` とする。
-- `rd` には false なら `0`、true なら `1` を書く。
+- `imm[2]`はresultを反転するbitとし、`0`ならそのまま、`1`なら論理否定する
+- `imm[15:3]`は`0`でなければならず、違反は`INVALID_INSTRUCTION`とする
+- `rd`にはfalseなら`0`、trueなら`1`を書く
 
 ## 5. shift命令
 
 ```text
 SHIFT rd, rs1, rs2, imm
-amount = (rs2 + imm[4:0]) & 31
+amount = (rs2 + imm[4:0]) mod 32
+signed_source = rs1 - 2^32 * floor(rs1 / 2^31)
 ```
 
 | `imm[15:14]` | 動作 |
 | --- | --- |
-| `00` | `rd = rs1 << amount` |
-| `10` | 論理右shift |
-| `11` | 算術右shift |
+| `00` | `rd = low32(rs1 * 2^amount)` |
+| `10` | `rd = floor(rs1 / 2^amount)` |
+| `11` | `rd = low32(floor(signed_source / 2^amount))` |
 | `01` | `INVALID_INSTRUCTION` |
 
-`imm[13:5]` は `0` でなければならず、違反は `INVALID_INSTRUCTION` とする。left shift は上位 bit を破棄し、logical right shift は `0`、arithmetic right shift は元の bit 31 で上位を埋める。
+`floor(x)`は`x`以下の最大の整数とする。\
+`imm[13:5]`は`0`でなければならず、違反は`INVALID_INSTRUCTION`とする。
 
 ## 6. load/store命令
 
@@ -95,7 +110,12 @@ STH rd, rs1, rs2, imm    rdの下位16 bitを書き込む
 STW rd, rs1, rs2, imm    rdの32 bitを書き込む
 ```
 
-16-bit access は 2-byte alignment、32-bit access は 4-byte alignment を要求する。違反は `UNALIGNED_ACCESS` とする。
+次のalignment条件を満たす場合、各loadは指定幅のreadを1回、各storeは指定幅のwriteを1回busへ要求する。\
+loadのdestinationが`r0`の場合もreadを実行し、読み込んだ値のregisterへの書き込みを破棄する。
+
+8-bit accessはすべてのbyte addressでalignment条件を満たす。\
+16-bit accessはaddressが2の倍数、32-bit accessは4の倍数であることをdata bus要求の成立条件とする。\
+alignment違反ではdata bus要求を行わず、`UNALIGNED_ACCESS`とする。
 
 ## 7. jump命令
 
@@ -104,17 +124,23 @@ JZ rd, rs1, rs2, imm
 offset = sext16(imm) << 2
 ```
 
-- `rs1 != 0` なら `PC = (PC + 4) mod 2^32` とし、`rd` を変更しない。
-- `rs1 == 0` なら `rd = (PC + 4) mod 2^32` とする。
-- `rs1 == 0` かつ `rs2 == r0` なら `PC = (PC + 4 + offset) mod 2^32` とする。
-- `rs1 == 0` かつ `rs2 != r0` なら `PC = (rs2 + offset) mod 2^32` とする。
-- indirect target が 4-byte aligned でなければ `UNALIGNED_PC` とする。
+- `rs1 != 0`なら`PC = (PC + 4) mod 2^32`とし、`rd`を変更せず、jump targetのalignment検査を行わない
+- `rs1 == 0`なら`rd = (PC + 4) mod 2^32`とする
+- `rs1 == 0`かつ`rs2 == r0`なら`PC = (PC + 4 + offset) mod 2^32`とする
+- `rs1 == 0`かつ`rs2 != r0`なら`PC = (rs2 + offset) mod 2^32`とする
+- indirect targetが4-byte alignedでなければ`UNALIGNED_PC`とする
 
-`rd == r0` の link write は破棄する。
+`rd == r0`のlink writeは破棄する。
+
+本節の`rs1`と`rs2`の数値計算は[命令encoding](#2-命令encoding)で定義する旧値を使う。\
+`rs2 == r0`と`rs2 != r0`はregister値ではなく`rs2` fieldが選ぶregisterの比較であり、field値が`0`の場合だけPC-relative形式を選ぶ。\
+`rd == r0`もdestinationのselectorを比較する。
 
 ## 8. 命令fetch
 
-fetch は `PC` から 32 bit を 1 回の bus access で読む。`PC` が 4-byte aligned でなければ `UNALIGNED_PC`、bus が fault を返せば `BUS_FAULT` とする。
+fetchのbus要求は`PC`が4の倍数である場合に成立し、`PC`から32 bitを1回のbus accessで読む。\
+alignment違反ではbus要求を行わず`UNALIGNED_PC`とし、busがfaultを返せば`BUS_FAULT`とする。\
+命令encodingの解釈と各命令の実行は、fetchが成功して命令wordを得た場合に行う。
 
 ## 9. fault処理
 
@@ -125,8 +151,13 @@ fetch は `PC` から 32 bit を 1 回の bus access で読む。`PC` が 4-byte
 | `UNALIGNED_PC` | fetch または indirect jump target の alignment 違反 |
 | `BUS_FAULT` | fetch、load、store の bus fault |
 
-faultした命令はregister、PC、bus deviceに副作用を残さず、CPUは停止してhostへ制御を返す。すべてのfault resultは`faulting_pc`を含む。
+faultした命令のregisterとPCは、その命令の実行試行を開始した時点の値を維持する。\
+その実行試行中に成功したbus accessのdevice副作用は、instruction fetchによるものを含めて保持する。\
+faultした個々のbus accessには[Bus契約のfault時の原子性](./bus.md#アクセス)を適用する。\
+CPUは停止してhostへ制御を返し、すべてのfault resultに`faulting_pc`を含める。
 
-- `UNALIGNED_ACCESS`はaddress、access width、`load`または`store`のoperationを含む。
-- `UNALIGNED_PC`はunalignedなPCまたはtarget addressを含む。
-- `BUS_FAULT`はaddress、access width、`fetch`、`load`、`store`のoperationを含む。
+`faulting_pc`は、faultした命令の実行試行を開始した時点の`PC`である。
+
+- `UNALIGNED_ACCESS`はaddress、access width、`load`または`store`のoperationを含む
+- `UNALIGNED_PC`はunalignedなPCまたはtarget addressを含む
+- `BUS_FAULT`はaddress、access width、`fetch`、`load`、`store`のoperationを含む

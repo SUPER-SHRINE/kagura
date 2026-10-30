@@ -3,11 +3,14 @@
 mod model;
 mod report;
 
+#[cfg(test)]
+mod tests;
+
 pub use report::{CaseResult, Mismatch, Summary};
 
 use conformance_machine::{
     BusEvent as ActualBusEvent, ConformanceMachine, HIGH_ROM_BASE, RAM_BASE, RAM_SIZE,
-    ReporterState,
+    REPORTER_BASE, ReporterState,
 };
 use kagura::{AccessOperation, AccessWidth, Fault};
 use model::{BusCase, BusEvent, CpuCase, DeviceState, Initial, MemoryRange, Transaction};
@@ -211,9 +214,6 @@ fn validate_devices(devices: &[DeviceState], allow: bool) -> Result<(), String> 
         {
             return Err(format!("invalid state fields for device `{}`", device.id));
         }
-        if device.id == "reporter" && device.state["reserved"] != 0 {
-            return Err("reporter reserved state must be zero".into());
-        }
     }
     Ok(())
 }
@@ -291,13 +291,21 @@ impl ReferenceMachine {
     fn execute(&mut self, case: &CpuCase) -> Result<ActualTermination, String> {
         let mut retired = 0;
         for _ in 0..case.execution.max_steps {
+            let trace_start = self.machine.trace().len();
             match self.machine.step() {
                 Ok(()) => retired += 1,
                 Err(fault) => return Ok(ActualTermination::fault(retired, fault)),
             }
-            let reporter = self.machine.reporter();
-            if reporter.status != 0 {
-                return Ok(ActualTermination::reporter(retired, reporter));
+            if self.machine.trace()[trace_start..].iter().any(|event| {
+                event.operation == "write"
+                    && event.address == REPORTER_BASE
+                    && event.width == 32
+                    && event.result == "ok"
+            }) {
+                return Ok(ActualTermination::reporter(
+                    retired,
+                    self.machine.reporter(),
+                ));
             }
             if case.execution.until == "steps" && case.execution.steps == Some(retired) {
                 return Ok(ActualTermination::steps(retired));
@@ -341,7 +349,9 @@ impl ReferenceMachine {
             }
             self.compare_memory(&state.memory, "state.memory", &mut out)?;
         }
-        compare_bus_events(&case.expected.bus, self.machine.trace(), "bus", &mut out);
+        if let Some(expected) = &case.expected.bus {
+            compare_bus_events(expected, self.machine.trace(), "bus", &mut out);
+        }
         self.compare_devices(&case.expected.devices, &mut out)?;
         Ok(out)
     }
@@ -642,9 +652,6 @@ fn compare_bus_events(
     prefix: &str,
     out: &mut Vec<Mismatch>,
 ) {
-    if expected.is_empty() {
-        return;
-    }
     if expected.len() != actual.len() {
         compare_value(
             format!("{prefix}.length"),
