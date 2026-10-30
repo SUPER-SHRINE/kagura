@@ -29,3 +29,24 @@ jobs:
 
       - name: Test support workspace
         run: cargo test --manifest-path support/Cargo.toml --workspace --locked
+
+  windows-installer:
+    name: Windows installer
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Build Kagura CLI
+        run: cargo build --manifest-path support/Cargo.toml --package kagura-cli --release --locked --target x86_64-pc-windows-msvc
+
+      - name: Test PATH ownership with Windows PowerShell
+        shell: powershell
+        run: ./tools/test-windows-installer-path.ps1
+
+      - name: Build and test Windows installer
+        shell: pwsh
+        run: |
+          ./tools/build-windows-installer.ps1
+          ./tools/test-windows-installer.ps1 -Installer (Get-Item 'target/windows-installer/dist/*-setup.exe').FullName

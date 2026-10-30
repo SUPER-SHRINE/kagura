@@ -1,5 +1,9 @@
 # Kagura
 
+![Kagura](assets/kagura-logo.png)
+
+- [documentation](https://super-shrine.github.io/kagura/)
+
 KaguraはCPU ISAとbus契約に焦点を当てた汎用VM基盤の規格です。
 
 `specs/`はこのリポジトリの本体であり、Kaguraの適合要件を定義する唯一の規範です。\
@@ -28,14 +32,6 @@ KaguraはCPU ISAとbus契約に焦点を当てた汎用VM基盤の規格です�
 実装と仕様が食い違う場合は`specs/`を正とします。\
 `support/`は仕様versionとは独立して更新でき、製品固有のmachine構成や統合規約は各製品側で管理します。
 
-## 参照実装
-
-Rust参照実装と付属ツールは、次のコマンドで検証できます。
-
-```text
-cargo test --manifest-path support/Cargo.toml --workspace
-```
-
 このテストでは、同じリポジトリにある規範適合試験suiteを直接使用します。
 
 ## バージョン
@@ -46,35 +42,6 @@ cargo test --manifest-path support/Cargo.toml --workspace
 
 例えば、support versionが`0.2.0`の場合、Git tagも`0.2.0`とします。
 
-## Release
-
-annotation付きtagをpushすると、GitHub Actionsがreleaseを作成します。\
-tagのannotationがrelease noteの本文になるため、対応する仕様書versionを記載した[release note](./RELEASE_NOTES.md)を使ってください。
-
-```bash
-git switch main
-git pull --ff-only origin main
-git tag -a 0.2.0 -F RELEASE_NOTES.md
-git push origin 0.2.0
-```
-
-workflowはtagとsupport versionの一致を検証し、test後にWindows x86_64、Linux x86_64、macOS arm64向けのarchiveとchecksumを作成します。\
-GitHub Releaseはdraftとして作成されるため、release noteとassetを確認してからGitHub上で公開します。\
-軽量tagはreleaseに使用できません。
-
 ## ライセンス
 
 このリポジトリは[MIT License](./LICENSE.md)で公開します。
-
-## ローカルで仕様を読む
-
-サイトはリポジトリのルートで次のコマンドを実行すると、生成して閲覧できます。
-
-```powershell
-python -m venv target/website/venv
-target/website/venv/Scripts/python -m pip install -r website/requirements.txt
-pwsh -NoProfile -File tools/build-docs.ps1 -Serve
-```
-
-初回はサイト生成用Python環境を作成し、依存関係をインストールしてください。\
-サイトは `http://localhost:8012` で開きます。

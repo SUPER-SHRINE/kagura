@@ -43,6 +43,7 @@ foreach ($path in @($sources, $public)) {
 if (Test-Path -LiteralPath $overrides) { Remove-Item -LiteralPath $overrides -Recurse -Force }
 New-Item -ItemType Directory -Path $sources -Force | Out-Null
 Copy-Item -LiteralPath (Join-Path $repo 'website/index.md') -Destination (Join-Path $sources 'index.md')
+Copy-Item -LiteralPath (Join-Path $repo 'website/support') -Destination (Join-Path $sources 'support') -Recurse
 Copy-Item -LiteralPath (Join-Path $repo 'specs') -Destination (Join-Path $sources 'specs') -Recurse
 $conformance = Join-Path $sources 'specs/kagura/v1/conformance.md'
 # The source has both conformance.md and conformance/README.md; rename only the generated copy to avoid the shared URL.
