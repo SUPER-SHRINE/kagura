@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - develop
   pull_request:
     branches:
       - main
@@ -37,14 +36,14 @@ jobs:
         run: pwsh -NoProfile -File tools/build-docs.ps1 -Python target/website/venv/bin/python
 
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4
         with:
           path: target/website/public
 
   deploy:
     name: Deploy site
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:
