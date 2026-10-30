@@ -9,6 +9,11 @@ site_dir = "public"
 strict = true
 nav = [
   { "Home" = "index.md" },
+  { "Support" = [
+    { "Windows" = "support/windows.md" },
+    { "Linux" = "support/linux.md" },
+    { "macOS" = "support/macos.md" },
+  ] },
   { "Specs" = [
     "specs/README.md",
     { "Kagura v1" = [
