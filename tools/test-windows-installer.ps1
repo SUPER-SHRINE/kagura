@@ -95,7 +95,20 @@ try {
     }
     function Run-Uninstaller {
         param([switch] $ExpectFailure)
-        $process = Start-Process -FilePath (Join-Path $app 'unins000.exe') -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', "/LOG=`"$work\uninstall.log`"") -Wait -PassThru -WindowStyle Hidden
+        $registration = $machineKey.OpenSubKey($uninstallPath)
+        try {
+            if (-not $registration) { throw '64-bitのマシン単位アンインストール登録がありません。' }
+            $uninstallString = $registration.GetValue('UninstallString')
+            if ([string]::IsNullOrWhiteSpace($uninstallString)) { throw 'アンインストール登録にUninstallStringがありません。' }
+            if ($uninstallString -match '^\s*"(?<exe>[^"]+\.exe)"(?:\s|$)') {
+                $uninstaller = $Matches.exe
+            } elseif ($uninstallString -match '^\s*(?<exe>.+?\.exe)(?:\s|$)') {
+                $uninstaller = $Matches.exe.Trim()
+            } else {
+                throw "UninstallStringから実行ファイルを取得できません: $uninstallString"
+            }
+        } finally { $registration.Dispose() }
+        $process = Start-Process -FilePath $uninstaller -ArgumentList @('/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', "/LOG=`"$work\uninstall.log`"") -Wait -PassThru -WindowStyle Hidden
         Assert-UserPath
         if ($ExpectFailure) {
             if ($process.ExitCode -eq 0 -or -not (Test-Path -LiteralPath (Join-Path $app 'kagura.exe'))) {
