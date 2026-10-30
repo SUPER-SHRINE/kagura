@@ -28,7 +28,7 @@ id = "reporter"
 state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }
 ```
 
-device IDとstate fieldは[Conformance Test Machine](./machine.md)に従う。\
+device IDとstate fieldの完全性は[machineのdevice状態](./machine.md#6-device状態)に従う。\
 記載しないdeviceはreset stateから開始する。
 
 Test RAMの初期byteはCPU caseと同じ`initial.memory`形式で指定できる。\
@@ -88,7 +88,7 @@ id = "reporter"
 state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }
 ```
 
-指定deviceの全state fieldをtransaction列の完了直後に比較する。\
+device IDとstate fieldの完全性は[machineのdevice状態](./machine.md#6-device状態)に従い、指定deviceの全state fieldをtransaction列の完了直後に比較する。\
 faultしたtransactionによる部分的または一時的な変更が残ってはならない。
 
 Test RAMの期待状態は`expected.memory` arrayで指定し、各要素の形式とrangeの条件は[CPU caseの`expected.state.memory`](./case-format.md#7-期待するアーキテクチャ状態)に従う。\

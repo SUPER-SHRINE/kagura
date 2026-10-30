@@ -30,5 +30,5 @@ fn reference_implementation_passes_all_normative_cases() {
         );
     }
 
-    assert_eq!(summary.total, 180, "unexpected conformance case count");
+    assert_eq!(summary.total, 181, "unexpected conformance case count");
 }

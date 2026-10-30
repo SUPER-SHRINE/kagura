@@ -143,7 +143,7 @@ fn current_conformance_manifest_validates_before_running_cases() {
     assert!(output.status.success());
     let stdout = String::from_utf8_lossy(&output.stdout);
     let lines = stdout.lines().collect::<Vec<_>>();
-    assert_eq!(lines.len(), 180);
+    assert_eq!(lines.len(), 181);
     assert!(
         lines
             .iter()
