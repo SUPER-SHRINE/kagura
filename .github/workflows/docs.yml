@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
-      - feature/zensical-docs
+      - develop
   pull_request:
     branches:
       - main
+      - develop
   workflow_dispatch:
 
 permissions:
@@ -36,14 +37,14 @@ jobs:
         run: pwsh -NoProfile -File tools/build-docs.ps1 -Python target/website/venv/bin/python
 
       - name: Upload Pages artifact
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
         uses: actions/upload-pages-artifact@v4
         with:
           path: target/website/public
 
   deploy:
     name: Deploy site
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/feature/zensical-docs')
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     needs: build
     runs-on: ubuntu-latest
     permissions:
