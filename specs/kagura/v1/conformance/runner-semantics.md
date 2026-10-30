@@ -101,7 +101,7 @@ runnerは最初の不一致で停止しても、全不一致を収集しても�
 ## 8. fault時のsemantics
 
 fault caseではCPUがhostへ返した直後のstateを比較する。\
-adapterはfaultした命令によるregister、PC、deviceへの部分的な変更をrollbackして隠してはならない。
+比較対象のstateには[CPU ISAのfault処理](../cpu.md#9-fault処理)を適用し、adapterは候補CPUが返したregister、PC、deviceの観測値をそのまま用いる。
 
 候補runtimeはfaultを例外、result value、callbackなど任意の形式で表現してもよい。\
 adapterはその形式をKagura fault名とmetadataへ損失なく変換しなければならない。

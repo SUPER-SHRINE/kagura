@@ -19,14 +19,13 @@ unmapped addressへの読み込みまたは書き込みはbus faultを返す。
 ## 3. Test RAM
 
 - Test RAMは64 KiBのbyte-addressed memoryとする
-- 8-bit、16-bit、32-bitの読み込みと書き込みを受理する
+- accessの全byteがrange内に収まる8-bit、16-bit、32-bitの読み込みと書き込みを、開始addressのalignmentによらず受理する
 - 複数byteの値の表現は[Bus契約](../bus.md#アクセス)に従う
 - range外へ一部でもはみ出すaccessはfaultし、memoryを変更しない
 - setup完了時に指定されていないbyteは`0`とする
 - hostによるbinary loadとinitial memory patchはCPU実行ではなく、bus traceにも記録しない
 
-CPUが要求するalignmentは[CPU ISA](../cpu.md)が検査する。\
-Test RAM自体はrange内のunaligned accessを受理してもよいが、適合CPUからそのaccessが到達してはならない。
+CPUが要求するalignmentは[CPU ISA](../cpu.md)が検査する。
 
 ## 4. High Test ROM
 
@@ -76,7 +75,8 @@ Case TOMLのdevice snapshotで使用するdevice IDを次に示す。
 | `reporter` | `status`, `case_id`, `detail`, `reserved` |
 | `high-rom` | `word` |
 
-runnerは未知のdevice IDまたはstate fieldをsuite errorとして拒否する。\
+CPU caseとBus caseの`initial.devices`および`expected.devices`の各entryは、指定deviceの全state fieldを正確に1回ずつ含める。\
+device IDは各list内で一意とし、runnerは未知のdevice ID、未知・欠落・重複したstate field、重複device IDをsuite errorとして拒否する。\
 device snapshotのsetupとinspectionはbus traceに含めない。
 
 ## 7. CPU起動時状態

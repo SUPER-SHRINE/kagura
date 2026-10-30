@@ -151,7 +151,9 @@ alignment違反ではbus要求を行わず`UNALIGNED_PC`とし、busがfaultを�
 | `UNALIGNED_PC` | fetch または indirect jump target の alignment 違反 |
 | `BUS_FAULT` | fetch、load、store の bus fault |
 
-faultした命令はregister、PC、bus deviceに副作用を残さない。\
+faultした命令のregisterとPCは、その命令の実行試行を開始した時点の値を維持する。\
+その実行試行中に成功したbus accessのdevice副作用は、instruction fetchによるものを含めて保持する。\
+faultした個々のbus accessには[Bus契約のfault時の原子性](./bus.md#アクセス)を適用する。\
 CPUは停止してhostへ制御を返し、すべてのfault resultに`faulting_pc`を含める。
 
 `faulting_pc`は、faultした命令の実行試行を開始した時点の`PC`である。

@@ -212,6 +212,9 @@ value = 3
 - setup、binary load、initial patch、結果観測はtraceに含めない
 - `expected.bus`を記載した場合、entry数と各entryを順序も含めて完全一致させる
 
+`expected.bus`の省略時はbus traceを比較しない。\
+空配列を指定する場合は、`[expected]` tableに`bus = []`を記載し、bus accessが0件であることを比較する。
+
 `value`の比較は[runnerのbus値比較](./runner-semantics.md#7-比較)に従う。
 
 ## 9. device状態
@@ -229,8 +232,7 @@ state = { status = 0, case_id = 0x11223344, detail = 0x55667788, reserved = 0 }
 ```
 
 - `initial.devices`と`expected.devices`はLevel 3だけで使用できる
-- device IDは各list内で一意とする
-- stateは[machine specification](./machine.md)がdeviceごとに定義する全fieldを正確に1回ずつ含める
+- device IDとstate fieldの完全性は[machineのdevice状態](./machine.md#6-device状態)に従う
 - setupとsnapshotはhost操作であり、bus traceに含めない
 - `expected.devices`を記載した場合、指定deviceの全state fieldを完全一致させる
 
