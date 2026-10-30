@@ -104,7 +104,7 @@ jobs:
           bundle="kagura-${GITHUB_REF_NAME}-${{ matrix.target }}"
           mkdir -p "dist/${bundle}"
           cp "support/target/${{ matrix.target }}/release/kagura" "dist/${bundle}/"
-          cp LICENSE.md README.md "dist/${bundle}/"
+          cp LICENSE.md README.md RELEASE_NOTES.md "dist/${bundle}/"
           cp -R specs "dist/${bundle}/"
           tar -C dist -czf "dist/${bundle}.tar.gz" "${bundle}"
 
@@ -116,7 +116,7 @@ jobs:
           $bundlePath = Join-Path "dist" $bundle
           New-Item -ItemType Directory -Path $bundlePath | Out-Null
           Copy-Item "support/target/${{ matrix.target }}/release/kagura.exe" $bundlePath
-          Copy-Item "LICENSE.md", "README.md" $bundlePath
+          Copy-Item "LICENSE.md", "README.md", "RELEASE_NOTES.md" $bundlePath
           Copy-Item "specs" $bundlePath -Recurse
           Compress-Archive -Path $bundlePath -DestinationPath "dist/$bundle.zip"
 

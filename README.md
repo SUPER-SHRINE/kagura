@@ -44,16 +44,18 @@ cargo test --manifest-path support/Cargo.toml --workspace
 - Git tagは`support/`全体のversionとし、SemVerの数値をそのまま使い、`v` prefixは付けません
 - 仕様書とsupportのversionは独立して更新し、supportのrelease noteに対応する仕様書versionを記載します
 
-例えば、support versionが`0.1.0`の場合、Git tagも`0.1.0`とします。
+例えば、support versionが`0.2.0`の場合、Git tagも`0.2.0`とします。
 
 ## Release
 
 annotation付きtagをpushすると、GitHub Actionsがreleaseを作成します。\
-tagのannotationがrelease noteの本文になるため、対応する仕様書versionを必ず記載してください。
+tagのannotationがrelease noteの本文になるため、対応する仕様書versionを記載した[release note](./RELEASE_NOTES.md)を使ってください。
 
 ```bash
-git tag -a 0.1.0
-git push origin 0.1.0
+git switch main
+git pull --ff-only origin main
+git tag -a 0.2.0 -F RELEASE_NOTES.md
+git push origin 0.2.0
 ```
 
 workflowはtagとsupport versionの一致を検証し、test後にWindows x86_64、Linux x86_64、macOS arm64向けのarchiveとchecksumを作成します。\
