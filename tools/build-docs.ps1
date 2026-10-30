@@ -47,9 +47,11 @@ Copy-Item -LiteralPath (Join-Path $repo 'specs') -Destination (Join-Path $source
 $conformance = Join-Path $sources 'specs/kagura/v1/conformance.md'
 # The source has both conformance.md and conformance/README.md; rename only the generated copy to avoid the shared URL.
 Move-Item -LiteralPath $conformance -Destination (Join-Path (Split-Path $conformance) 'conformance-overview.md')
-$specIndex = Join-Path $sources 'specs/kagura/v1/README.md'
-$indexText = [IO.File]::ReadAllText($specIndex).Replace('./conformance.md', './conformance-overview.md')
-[IO.File]::WriteAllText($specIndex, $indexText, [Text.UTF8Encoding]::new($false))
+foreach ($index in @('specs/kagura/v1/README.md', 'specs/kagura/v1/conformance/README.md')) {
+    $specIndex = Join-Path $sources $index
+    $indexText = [IO.File]::ReadAllText($specIndex).Replace('conformance.md', 'conformance-overview.md')
+    [IO.File]::WriteAllText($specIndex, $indexText, [Text.UTF8Encoding]::new($false))
+}
 foreach ($suite in @('cpu', 'bus')) {
     $caseRoot = Join-Path $sources "specs/kagura/v1/conformance/cases/$suite"
     $lines = [Collections.Generic.List[string]]::new()

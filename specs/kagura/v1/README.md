@@ -1,7 +1,7 @@
 # Kagura規範仕様
 
-KaguraはCPU ISAとbus contractだけを定義する汎用runtime規格である。仕様書versionは
-[`../../README.md`](../../README.md)の記載に従う。
+KaguraはCPU ISAとbus契約だけを定義する汎用runtime規格である。\
+仕様書versionは[`../../README.md`](../../README.md)の記載に従う。
 
 - [CPU ISA](./cpu.md)
 - [Bus契約](./bus.md)
@@ -10,19 +10,18 @@ KaguraはCPU ISAとbus contractだけを定義する汎用runtime規格である
 
 ## 適用範囲
 
-Kagura が規定するもの:
+CPU ISAとbus契約は次を定義する。
 
 - instruction encoding と architectural state transition
 - fault の発生条件
 - CPU と bus の access contract
 
-Kagura が規定しないもの:
+Kaguraを利用する各machineまたはsoftware layerは、次の契約を定義する。
 
 - source program の表記と変換方法
 - 具体的な address map、memory 容量、初期配置
 - software 実行上の規約と package 形式
 - 製品固有の device と host service
 
-これらは Kagura を利用する各 machine または software layer が定義します。Kagura の仕様と test case は、その具体的な選択へ依存してはいけません。
-
-適合試験で使用する address map、test device、case file は Kagura runtime の要件ではない。これらは [Conformance Test Specification](./conformance/README.md) が、異なる実装へ同じ試験を適用するために定義する。
+CPU ISAとbus契約への適合は、これらの製品固有の選択から独立して判定する。\
+適合試験用のaddress map、test device、case fileは[Conformance Test Specification](./conformance/README.md)が定義し、runner adapterが異なる実装へ共通の試験を適用するために使用する。

@@ -41,3 +41,7 @@ features = ["navigation.tabs", "navigation.sections", "navigation.indexes"]
 [project.validation]
 invalid_links = true
 invalid_link_anchors = false
+
+[project.markdown_extensions]
+pymdownx.escapeall = { hardbreak = true }
+toc = { slugify = { object = "pymdownx.slugs.slugify", kwds = { case = "lower" } } }
